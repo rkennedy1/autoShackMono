@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // material-ui
 import {
@@ -33,6 +33,10 @@ import avatar1 from 'assets/images/users/avatar-1.png';
 import avatar2 from 'assets/images/users/avatar-2.png';
 import avatar3 from 'assets/images/users/avatar-3.png';
 import avatar4 from 'assets/images/users/avatar-4.png';
+
+// api
+import SensorApi from 'api/SensorApi';
+import { date } from '../../../node_modules/yup/lib/locale';
 
 // avatar style
 const avatarSX = {
@@ -72,6 +76,11 @@ const status = [
 const DashboardDefault = () => {
     const [value, setValue] = useState('today');
     const [slot, setSlot] = useState('week');
+    const [data, setData] = useState()
+
+    useEffect(() => {
+        console.log(SensorApi("lastDay"))
+    })
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -80,10 +89,10 @@ const DashboardDefault = () => {
                 <Typography variant="h5">Dashboard</Typography>
             </Grid>
             <Grid item xs={3} >
-                <SensorReading title="Tempurature" value="74.3" percentage={59.3} />
+                <SensorReading title="Tempurature" value={10} percentage={59.3} />
             </Grid>
             <Grid item xs={3} >
-                <SensorReading title="Humidity" value="54.2" percentage={70.5} />
+                <SensorReading title="Humidity" value={10} percentage={70.5} />
             </Grid>
 
 
