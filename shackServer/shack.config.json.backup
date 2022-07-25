@@ -1,0 +1,22 @@
+{
+   "events": [
+      {
+          "index": 1,
+          "start_hour": 0,
+          "start_minute": 0,
+          "duration": 6
+      },
+      {
+          "index": 2,
+          "start_hour": 6,
+          "start_minute": 0,
+          "duration": 6
+      },
+      {
+         "index": 3, 
+         "start_hour": 18,
+         "start_minute": 0,
+         "duration": 6
+      }
+    ]
+}
