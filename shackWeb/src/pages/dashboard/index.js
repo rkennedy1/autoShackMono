@@ -71,15 +71,38 @@ const status = [
     }
 ];
 
+function getData() {
+    let temperature = 0
+    let humidity = 0
+    let flow = 0
+    fetch("http://raspberrypi.local:3001/data/lastItem").then(response => response.json()).then(json => {
+        if (json.temperature && json.humidity) {
+            let date = new Date(json[i].datetime)
+            temperature = json.temperature
+            humidity = json.humidity
+            flow = json.flow
+        }
+        return {temperature: temperature, humidity: humidity, flow:flow}
+    })
+}
+
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const DashboardDefault = () => {
     const [value, setValue] = useState('today');
     const [slot, setSlot] = useState('week');
-    const [data, setData] = useState()
+    const [temperature, setTemp] = useState();
+    const [humidity, setHumidity] = useState();
+    const [flow, setFlow] = useState();
 
     useEffect(() => {
-        console.log(SensorApi("lastDay"))
+        fetch("http://raspberrypi.local:3001/data/lastItem").then(response => response.json()).then(json => {
+            if (json) {
+                setTemp(json[0].temperature)
+                setHumidity(json[0].humidity)
+                setFlow(json.flow_rate)
+            }
+        })
     })
 
     return (
@@ -89,10 +112,10 @@ const DashboardDefault = () => {
                 <Typography variant="h5">Dashboard</Typography>
             </Grid>
             <Grid item xs={3} >
-                <SensorReading title="Tempurature" value={10} percentage={59.3} />
+                <SensorReading title="Tempurature" value={temperature} percentage={temperature} />
             </Grid>
             <Grid item xs={3} >
-                <SensorReading title="Humidity" value={10} percentage={70.5} />
+                <SensorReading title="Humidity" value={humidity} percentage={humidity} />
             </Grid>
 
 
