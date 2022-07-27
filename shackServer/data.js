@@ -57,4 +57,12 @@ router.get('/lastMonth', function (req,res) {
   })
 })
 
+router.get('/lastItem', function (req,res) {
+  let query = `SELECT * FROM shacklog ORDER BY id DESC LIMIT 1;`
+  db.query(query, function (err, result, fields) {
+    if (err) throw console.error(err)
+    res.send(result)
+  })
+})
+
 module.exports = router;
