@@ -1,0 +1,36 @@
+import json
+import os
+import random
+import time
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
+def generateFileName(timezone):
+    os.environ['TZ'] = timezone
+    time.tzset()
+    return time.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
+def takePicture(fileName):
+    os.system("libcamera-still -t 5000 --viewfinder-width 2312 --viewfinder-height 1736 --width 4624 --height 3472 -o ~/autoShackMono/shackCamera/pics/{} --autofocus".format(fileName))
+    return
+
+
+def pushPicture(fileName):
+    os.system("sshpass -p {} scp ~/autoShackMono/shackCamera/pics/{} pi@raspberrypi.local:~/autoShackMono/shackServer/images/{}".format(os.getenv('PASSWORD'), fileName, fileName))
+    url = 'http://raspberrypi.local:3001/lastPicture'
+    requests.post(url, data={'fileName': fileName}, timeout=5)
+    return
+
+def main():
+    print("start")
+    fileName = generateFileName('America/Los_Angeles')+'.jpg'
+    takePicture(fileName)
+    pushPicture(fileName)
+    print("done")
+
+
+if __name__ == "__main__":
+    main()
