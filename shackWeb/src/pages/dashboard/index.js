@@ -72,38 +72,42 @@ const status = [
 ];
 
 function getData() {
-    let temperature = 0
-    let humidity = 0
-    let flow = 0
-    fetch("http://raspberrypi.local:3001/data/lastItem").then(response => response.json()).then(json => {
-        if (json.temperature && json.humidity) {
-            let date = new Date(json[i].datetime)
-            temperature = json.temperature
-            humidity = json.humidity
-            flow = json.flow
-        }
-        return {temperature: temperature, humidity: humidity, flow:flow}
-    })
+    let temperature = 0;
+    let humidity = 0;
+    let flow = 0;
+    fetch('http://raspberrypi.local:3001/data/lastItem')
+        .then((response) => response.json())
+        .then((json) => {
+            if (json.temperature && json.humidity) {
+                let date = new Date(json[i].datetime);
+                temperature = json.temperature;
+                humidity = json.humidity;
+                flow = json.flow;
+            }
+            return { temperature: temperature, humidity: humidity, flow: flow };
+        });
 }
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const DashboardDefault = () => {
     const [value, setValue] = useState('today');
-    const [slot, setSlot] = useState('week');
+    const [slot, setSlot] = useState('day');
     const [temperature, setTemp] = useState();
     const [humidity, setHumidity] = useState();
     const [flow, setFlow] = useState();
 
     useEffect(() => {
-        fetch("http://raspberrypi.local:3001/data/lastItem").then(response => response.json()).then(json => {
-            if (json) {
-                setTemp(json[0].temperature)
-                setHumidity(json[0].humidity)
-                setFlow(json.flow_rate)
-            }
-        })
-    })
+        fetch('http://raspberrypi.local:3001/data/lastItem')
+            .then((response) => response.json())
+            .then((json) => {
+                if (json) {
+                    setTemp(json[0].temperature);
+                    setHumidity(json[0].humidity);
+                    setFlow(json.flow_rate);
+                }
+            });
+    });
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -111,13 +115,12 @@ const DashboardDefault = () => {
             <Grid item xs={12} sx={{ mb: -2.25 }}>
                 <Typography variant="h5">Dashboard</Typography>
             </Grid>
-            <Grid item xs={3} >
+            <Grid item xs={3}>
                 <SensorReading title="Tempurature" value={temperature} percentage={temperature} />
             </Grid>
-            <Grid item xs={3} >
+            <Grid item xs={3}>
                 <SensorReading title="Humidity" value={humidity} percentage={humidity} />
             </Grid>
-
 
             <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
 
@@ -131,26 +134,26 @@ const DashboardDefault = () => {
                         <Stack direction="row" alignItems="center" spacing={0}>
                             <Button
                                 size="small"
-                                onClick={() => setSlot('month')}
-                                color={slot === 'month' ? 'primary' : 'secondary'}
-                                variant={slot === 'month' ? 'outlined' : 'text'}
+                                onClick={() => setSlot('day')}
+                                color={slot === 'day' ? 'primary' : 'secondary'}
+                                variant={slot === 'day' ? 'outlined' : 'text'}
                             >
-                                Month
+                                Day
                             </Button>
-                            <Button
+                            {/* <Button
                                 size="small"
                                 onClick={() => setSlot('week')}
                                 color={slot === 'week' ? 'primary' : 'secondary'}
                                 variant={slot === 'week' ? 'outlined' : 'text'}
                             >
                                 Week
-                            </Button>
+                            </Button> */}
                         </Stack>
                     </Grid>
                 </Grid>
                 <MainCard content={false} sx={{ mt: 1.5 }}>
                     <Box sx={{ pt: 1, pr: 2 }}>
-                        <IncomeAreaChart slot={slot} />
+                        <IncomeAreaChart />
                     </Box>
                 </MainCard>
             </Grid>
@@ -162,14 +165,11 @@ const DashboardDefault = () => {
                     <Grid item />
                 </Grid>
                 <MainCard sx={{ mt: 2 }} content={false}>
-                    <Box sx={{ p: 3, pb: 0 }}>
-
-                    </Box>
+                    <Box sx={{ p: 3, pb: 0 }}></Box>
                     <MonthlyBarChart />
                 </MainCard>
             </Grid>
         </Grid>
-
     );
 };
 
