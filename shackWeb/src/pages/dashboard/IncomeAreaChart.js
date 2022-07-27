@@ -28,6 +28,20 @@ const areaChartOptions = {
     }
 };
 
+function getDateSlice(dates, delta) {
+    let resDates = [];
+    let dateDelta = Math.round(dates.length / delta);
+    let counter = 0;
+    dates.map((date) => {
+        if (counter == dateDelta) {
+            resDates.push(date);
+            counter = 0;
+        }
+        counter++;
+    });
+    return resDates;
+}
+
 // ==============================|| INCOME AREA CHART ||============================== //
 
 const IncomeAreaChart = ({ slot }) => {
@@ -62,13 +76,13 @@ const IncomeAreaChart = ({ slot }) => {
                 let flows = [];
                 json.map((entry) => {
                     if (entry.temperature && entry.humidity) {
-                        dates.push(entry.datetime);
+                        let date = new Date(entry.datetime);
+                        dates.push(date.toISOString().slice(0, 19).replace(/-/g, '/').replace('T', ' '));
                         temps.push(entry.temperature);
                         humiditys.push(entry.humidity);
                         flows.push(entry.flow_rate);
                     }
                 });
-                console.log([dates, temps, humiditys, flows]);
                 setSeries([
                     {
                         name: 'Tempurature',
@@ -83,87 +97,64 @@ const IncomeAreaChart = ({ slot }) => {
                         data: flows
                     }
                 ]);
+                let dateSlice = getDateSlice(dates, 24);
+                setOptions((prevState) => ({
+                    ...prevState,
+                    colors: [theme.palette.primary.main, theme.palette.primary[700]],
+                    xaxis: {
+                        categories: dates,
+                        labels: {
+                            style: {
+                                colors: [
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary,
+                                    secondary
+                                ]
+                            }
+                        },
+                        axisBorder: {
+                            show: true,
+                            color: line
+                        },
+                        tickAmount: 24
+                    },
+                    yaxis: {
+                        labels: {
+                            style: {
+                                colors: [secondary]
+                            }
+                        }
+                    },
+                    grid: {
+                        borderColor: line
+                    },
+                    tooltip: {
+                        theme: 'light'
+                    }
+                }));
             });
-        setOptions((prevState) => ({
-            ...prevState,
-            colors: [theme.palette.primary.main, theme.palette.primary[700]],
-            xaxis: {
-                categories: dates,
-                labels: {
-                    style: {
-                        colors: [
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary,
-                            secondary
-                        ]
-                    }
-                },
-                axisBorder: {
-                    show: true,
-                    color: line
-                },
-                tickAmount: 24
-            },
-            yaxis: {
-                labels: {
-                    style: {
-                        colors: [secondary]
-                    }
-                }
-            },
-            grid: {
-                borderColor: line
-            },
-            tooltip: {
-                theme: 'light'
-            }
-        }));
     }, [primary, secondary, line, theme, slot, setSeries]);
-
-    // const [series, setSeries] = useState([
-    //     {
-    //         name: 'Tempurature',
-    //         data: data[1]
-    //     },
-    //     {
-    //         name: 'Sessions',
-    //         data: data[2]
-    //     }
-    // ]);
-
-    // useEffect(() => {
-    //     setSeries([
-    //         {
-    //             name: 'Page Views',
-    //             data: slot === 'month' ? [76, 85, 101, 98, 87, 105, 91, 114, 94, 86, 115, 35] : [31, 40, 28, 51, 42, 109, 100]
-    //         },
-    //         {
-    //             name: 'Sessions',
-    //             data: slot === 'month' ? [110, 60, 150, 35, 60, 36, 26, 45, 65, 52, 53, 41] : [11, 32, 45, 32, 34, 52, 41]
-    //         }
-    //     ]);
-    // }, [slot]);
 
     return <ReactApexChart options={options} series={series} type="line" height={450} />;
 };

@@ -80,6 +80,7 @@ function getData() {
         .then((json) => {
             if (json.temperature && json.humidity) {
                 let date = new Date(json[i].datetime);
+                console.log(date);
                 temperature = json.temperature;
                 humidity = json.humidity;
                 flow = json.flow;
