@@ -97,6 +97,7 @@ const DashboardDefault = () => {
     const [temperature, setTemp] = useState();
     const [humidity, setHumidity] = useState();
     const [flow, setFlow] = useState();
+    const [lastPic, setLastPic] = useState('');
 
     useEffect(() => {
         fetch('http://raspberrypi.local:3001/data/lastItem')
@@ -107,6 +108,12 @@ const DashboardDefault = () => {
                     setHumidity(json[0].humidity);
                     setFlow(json.flow_rate);
                 }
+            });
+        fetch('http://raspberrypi.local:3001/lastPicture')
+            .then((response) => response.json())
+            .then((json) => {
+                setLastPic(json.lastPic)
+                console.log(lastPic)
             });
     });
 
@@ -167,7 +174,7 @@ const DashboardDefault = () => {
                 </Grid>
                 <MainCard sx={{ mt: 2 }} content={false}>
                     <Box sx={{ p: 3, pb: 0 }}></Box>
-                    <MonthlyBarChart />
+                    <img src={`http://raspberrypi.local:3001/images/${lastPic}`} alt="Last Picture Taken in the Tent" width="400" height="400"/>
                 </MainCard>
             </Grid>
         </Grid>
