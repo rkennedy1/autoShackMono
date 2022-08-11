@@ -117,6 +117,11 @@ const DashboardDefault = () => {
             });
     });
 
+    function takePicture() {
+        console.log('picture')
+        fetch('http:camerapi.local:5000/')
+    }
+
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
             {/* row 1 */}
@@ -170,7 +175,17 @@ const DashboardDefault = () => {
                     <Grid item>
                         <Typography variant="h5">Tent Photo</Typography>
                     </Grid>
-                    <Grid item />
+                    <Grid item>
+                        <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={() => {
+                                takePicture()
+                            }}
+                        >
+                            Take Photo
+                        </Button>
+                    </Grid>
                 </Grid>
                 <MainCard sx={{ mt: 2 }} content={false}>
                     <Box sx={{ p: 3, pb: 0 }}></Box>
