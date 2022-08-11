@@ -19,11 +19,11 @@ app.use(express.static('public'));
 app.use('/images', express.static('images'));
 
 app.post('/lastPicture', function (req, res) {
-    console.log(req.body)
     lastPicture = req.body.fileName
+    res.send('a ok')
 })
 app.get('/lastPicture', function (req, res) {
-    res.send(lastPicture)
+    res.json({lastPic: lastPicture})
 })
 
 var dataRouter = require("./data.js");
