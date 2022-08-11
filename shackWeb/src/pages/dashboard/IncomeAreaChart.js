@@ -28,23 +28,23 @@ const areaChartOptions = {
     }
 };
 
-function getDateSlice(dates, delta) {
-    let resDates = [];
-    let dateDelta = Math.round(dates.length / delta);
-    let counter = 0;
-    dates.map((date) => {
-        if (counter == dateDelta) {
-            resDates.push(date);
-            counter = 0;
-        }
-        counter++;
-    });
-    return resDates;
-}
+// function getDateSlice(dates, delta) {
+//     let resDates = [];
+//     let dateDelta = Math.round(dates.length / delta);
+//     let counter = 0;
+//     dates.map((date) => {
+//         if (counter == dateDelta) {
+//             resDates.push(date);
+//             counter = 0;
+//         }
+//         counter++;
+//     });
+//     return resDates;
+// }
 
 // ==============================|| INCOME AREA CHART ||============================== //
 
-const IncomeAreaChart = ({ slot }) => {
+const ShackDataChart = ({ slot }) => {
     const theme = useTheme();
 
     const { primary, secondary } = theme.palette.text;
@@ -80,7 +80,7 @@ const IncomeAreaChart = ({ slot }) => {
                         dates.push(date.toISOString().slice(0, 19).replace(/-/g, '/').replace('T', ' '));
                         temps.push(entry.temperature);
                         humiditys.push(entry.humidity);
-                        flows.push(entry.flow_rate);
+                        flows.push(entry.flow_rate * 10);
                     }
                 });
                 setSeries([
@@ -97,7 +97,6 @@ const IncomeAreaChart = ({ slot }) => {
                         data: flows
                     }
                 ]);
-                let dateSlice = getDateSlice(dates, 24);
                 setOptions((prevState) => ({
                     ...prevState,
                     colors: [theme.palette.primary.main, theme.palette.primary[700]],
@@ -105,39 +104,14 @@ const IncomeAreaChart = ({ slot }) => {
                         categories: dates,
                         labels: {
                             style: {
-                                colors: [
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary,
-                                    secondary
-                                ]
+                                colors: [secondary, secondary, secondary, secondary, secondary, secondary, secondary, secondary, secondary]
                             }
                         },
                         axisBorder: {
                             show: true,
                             color: line
                         },
-                        tickAmount: 24
+                        tickAmount: 12
                     },
                     yaxis: {
                         labels: {
@@ -159,8 +133,8 @@ const IncomeAreaChart = ({ slot }) => {
     return <ReactApexChart options={options} series={series} type="line" height={450} />;
 };
 
-IncomeAreaChart.propTypes = {
+ShackDataChart.propTypes = {
     slot: PropTypes.string
 };
 
-export default IncomeAreaChart;
+export default ShackDataChart;

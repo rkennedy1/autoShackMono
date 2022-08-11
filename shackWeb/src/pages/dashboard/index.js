@@ -20,7 +20,7 @@ import {
 
 // project import
 import OrdersTable from './OrdersTable';
-import IncomeAreaChart from './IncomeAreaChart';
+import ShackDataChart from './IncomeAreaChart';
 import MonthlyBarChart from './MonthlyBarChart';
 import ReportAreaChart from './ReportAreaChart';
 import SalesColumnChart from './SalesColumnChart';
@@ -83,7 +83,8 @@ function getData() {
                 console.log(date);
                 temperature = json.temperature;
                 humidity = json.humidity;
-                flow = json.flow;
+                flow = json.flow * 10;
+                console.log(json.flow, '    :     ', flow);
             }
             return { temperature: temperature, humidity: humidity, flow: flow };
         });
@@ -97,7 +98,7 @@ const DashboardDefault = () => {
     const [temperature, setTemp] = useState();
     const [humidity, setHumidity] = useState();
     const [flow, setFlow] = useState();
-    const [lastPic, setLastPic] = useState('');
+    const [lastPic, setLastPic] = useState('loading_gif.gif');
 
     useEffect(() => {
         fetch('http://raspberrypi.local:3001/data/lastItem')
@@ -106,20 +107,20 @@ const DashboardDefault = () => {
                 if (json) {
                     setTemp(json[0].temperature);
                     setHumidity(json[0].humidity);
-                    setFlow(json.flow_rate);
+                    setFlow(json[0].flow_rate);
                 }
             });
         fetch('http://raspberrypi.local:3001/lastPicture')
             .then((response) => response.json())
             .then((json) => {
-                setLastPic(json.lastPic)
-                console.log(lastPic)
+                setLastPic(json.lastPic);
+                console.log(lastPic);
             });
     });
 
     function takePicture() {
-        console.log('picture')
-        fetch('http:camerapi.local:5000/')
+        console.log('picture');
+        fetch('http:camerapi.local:5000/');
     }
 
     return (
@@ -166,7 +167,7 @@ const DashboardDefault = () => {
                 </Grid>
                 <MainCard content={false} sx={{ mt: 1.5 }}>
                     <Box sx={{ pt: 1, pr: 2 }}>
-                        <IncomeAreaChart />
+                        <ShackDataChart />
                     </Box>
                 </MainCard>
             </Grid>
@@ -180,7 +181,7 @@ const DashboardDefault = () => {
                             size="small"
                             variant="outlined"
                             onClick={() => {
-                                takePicture()
+                                takePicture();
                             }}
                         >
                             Take Photo
@@ -189,7 +190,12 @@ const DashboardDefault = () => {
                 </Grid>
                 <MainCard sx={{ mt: 2 }} content={false}>
                     <Box sx={{ p: 3, pb: 0 }}></Box>
-                    <img src={`http://raspberrypi.local:3001/images/${lastPic}`} alt="Last Picture Taken in the Tent" width="400" height="400"/>
+                    <img
+                        src={`http://raspberrypi.local:3001/images/${lastPic}`}
+                        alt="Last One Taken in the Tent"
+                        width="400"
+                        height="400"
+                    />
                 </MainCard>
             </Grid>
         </Grid>
