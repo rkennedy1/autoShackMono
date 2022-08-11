@@ -97,6 +97,7 @@ const DashboardDefault = () => {
     const [temperature, setTemp] = useState();
     const [humidity, setHumidity] = useState();
     const [flow, setFlow] = useState();
+    const [lastPic, setLastPic] = useState('');
 
     useEffect(() => {
         fetch('http://raspberrypi.local:3001/data/lastItem')
@@ -108,7 +109,18 @@ const DashboardDefault = () => {
                     setFlow(json.flow_rate);
                 }
             });
+        fetch('http://raspberrypi.local:3001/lastPicture')
+            .then((response) => response.json())
+            .then((json) => {
+                setLastPic(json.lastPic)
+                console.log(lastPic)
+            });
     });
+
+    function takePicture() {
+        console.log('picture')
+        fetch('http:camerapi.local:5000/')
+    }
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -163,11 +175,21 @@ const DashboardDefault = () => {
                     <Grid item>
                         <Typography variant="h5">Tent Photo</Typography>
                     </Grid>
-                    <Grid item />
+                    <Grid item>
+                        <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={() => {
+                                takePicture()
+                            }}
+                        >
+                            Take Photo
+                        </Button>
+                    </Grid>
                 </Grid>
                 <MainCard sx={{ mt: 2 }} content={false}>
                     <Box sx={{ p: 3, pb: 0 }}></Box>
-                    <MonthlyBarChart />
+                    <img src={`http://raspberrypi.local:3001/images/${lastPic}`} alt="Last Picture Taken in the Tent" width="400" height="400"/>
                 </MainCard>
             </Grid>
         </Grid>
