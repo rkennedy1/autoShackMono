@@ -120,7 +120,7 @@ const DashboardDefault = () => {
 
     function takePicture() {
         console.log('picture');
-        fetch('http:camerapi.local:5000/');
+        fetch('http://camerapi.local:5000/takePicture');
     }
 
     return (
