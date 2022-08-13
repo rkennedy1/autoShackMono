@@ -1,11 +1,23 @@
 from flask import Flask
 from cam import Cam
+from flask_cors import CORS
+import os
 
 app = Flask(__name__)
+CORS(app)
 cam = Cam()
 
+cors = CORS(app, resource={
+    r"*":{
+         "origins":"raspberrypi.local"
+    }
+})
 
-@app.route('/')
+app.config.update(
+    DEBUG=os.environ.get("FLASK_DEBUG"),
+    ENV=os.environ.get("FLASK_ENV")
+)
+
+@app.route('/takePicture')
 def takePicture():
-    cam.main()
-    return 'Picture Taken!'
+    return cam.main()

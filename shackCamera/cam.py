@@ -40,6 +40,7 @@ class Cam:
         print("picture sent to autoshack")
 
         print("done")
+        return self.fileName
 
 
 if __name__ == "__main__":
