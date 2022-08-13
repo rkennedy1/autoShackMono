@@ -127,4 +127,9 @@ dist
 .pnp.*
 
 __pycache__/
+
 shack.config.json
+
+/shackServer/images/
+/shackCamera/pics/
+/shackCamera/bug-report.txt
