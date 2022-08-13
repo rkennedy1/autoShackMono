@@ -26,6 +26,7 @@ import Transitions from 'components/@extended/Transitions';
 
 // assets
 import { BellOutlined, CloseOutlined, GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
+import { ListItem } from '../../../../../node_modules/@mui/material/index';
 
 // sx styles
 const avatarSX = {
@@ -136,6 +137,7 @@ const Notification = () => {
                                             }
                                         }}
                                     >
+<<<<<<< Updated upstream
                                         <ListItemButton>
                                             <ListItemAvatar>
                                                 <Avatar
@@ -196,33 +198,34 @@ const Notification = () => {
                                         </ListItemButton>
                                         <Divider />
                                         <ListItemButton>
+=======
+                                        <ListItemButton key={item}>
+>>>>>>> Stashed changes
                                             <ListItemAvatar>
                                                 <Avatar
                                                     sx={{
-                                                        color: 'error.main',
-                                                        bgcolor: 'error.lighter'
+                                                        color: 'success.main',
+                                                        bgcolor: 'success.lighter'
                                                     }}
                                                 >
-                                                    <SettingOutlined />
+                                                    <GiftOutlined />
                                                 </Avatar>
                                             </ListItemAvatar>
                                             <ListItemText
                                                 primary={
                                                     <Typography variant="h6">
-                                                        Your Profile is Complete &nbsp;
-                                                        <Typography component="span" variant="subtitle1">
-                                                            60%
-                                                        </Typography>{' '}
+                                                        {item}
                                                     </Typography>
                                                 }
-                                                secondary="7 hours ago"
+                                                secondary="2 min ago"
                                             />
                                             <ListItemSecondaryAction>
                                                 <Typography variant="caption" noWrap>
-                                                    2:45 PM
+                                                    3:00 AM
                                                 </Typography>
                                             </ListItemSecondaryAction>
                                         </ListItemButton>
+<<<<<<< Updated upstream
                                         <Divider />
                                         <ListItemButton>
                                             <ListItemAvatar>
@@ -265,6 +268,8 @@ const Notification = () => {
                                                 }
                                             />
                                         </ListItemButton>
+=======
+>>>>>>> Stashed changes
                                     </List>
                                 </MainCard>
                             </ClickAwayListener>
@@ -277,3 +282,5 @@ const Notification = () => {
 };
 
 export default Notification;
+ 
+{/*  */}
