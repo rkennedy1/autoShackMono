@@ -49,6 +49,8 @@ SensorReading.propTypes = {
     color: PropTypes.string,
     title: PropTypes.string,
     count: PropTypes.string,
+    value: PropTypes.any,
+    isDecrease: PropTypes.any,
     percentage: PropTypes.number,
     isLoss: PropTypes.bool,
     extra: PropTypes.oneOfType([PropTypes.node, PropTypes.string])
