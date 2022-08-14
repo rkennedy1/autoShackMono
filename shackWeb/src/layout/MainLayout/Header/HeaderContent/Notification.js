@@ -207,14 +207,7 @@ const Notification = () => {
                                                     <GiftOutlined />
                                                 </Avatar>
                                             </ListItemAvatar>
-                                            <ListItemText
-                                                primary={
-                                                    <Typography variant="h6">
-                                                        {item}
-                                                    </Typography>
-                                                }
-                                                secondary="2 min ago"
-                                            />
+                                            <ListItemText primary={<Typography variant="h6">{item}</Typography>} secondary="2 min ago" />
                                             <ListItemSecondaryAction>
                                                 <Typography variant="caption" noWrap>
                                                     3:00 AM
@@ -275,5 +268,7 @@ const Notification = () => {
 };
 
 export default Notification;
- 
-{/*  */}
+
+{
+    /*  */
+}
