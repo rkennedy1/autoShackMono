@@ -137,7 +137,6 @@ const Notification = () => {
                                             }
                                         }}
                                     >
-<<<<<<< Updated upstream
                                         <ListItemButton>
                                             <ListItemAvatar>
                                                 <Avatar
@@ -197,10 +196,7 @@ const Notification = () => {
                                             </ListItemSecondaryAction>
                                         </ListItemButton>
                                         <Divider />
-                                        <ListItemButton>
-=======
                                         <ListItemButton key={item}>
->>>>>>> Stashed changes
                                             <ListItemAvatar>
                                                 <Avatar
                                                     sx={{
@@ -225,7 +221,6 @@ const Notification = () => {
                                                 </Typography>
                                             </ListItemSecondaryAction>
                                         </ListItemButton>
-<<<<<<< Updated upstream
                                         <Divider />
                                         <ListItemButton>
                                             <ListItemAvatar>
@@ -268,8 +263,6 @@ const Notification = () => {
                                                 }
                                             />
                                         </ListItemButton>
-=======
->>>>>>> Stashed changes
                                     </List>
                                 </MainCard>
                             </ClickAwayListener>
