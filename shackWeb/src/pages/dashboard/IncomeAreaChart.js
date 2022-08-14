@@ -75,7 +75,7 @@ const ShackDataChart = ({ slot }) => {
                 let humiditys = [];
                 let flows = [];
                 json.map((entry) => {
-                    if (entry.temperature && entry.humidity) {
+                    if (entry.datetime) {
                         let date = new Date(entry.datetime);
                         dates.push(date.toISOString().slice(0, 19).replace(/-/g, '/').replace('T', ' '));
                         temps.push(entry.temperature);

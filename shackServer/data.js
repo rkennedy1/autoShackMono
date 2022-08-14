@@ -66,4 +66,12 @@ router.get("/lastItem", function (req, res) {
   });
 });
 
+router.get("/lastFlow", function (req, res) {
+  let query = `SELECT * FROM shacklog WHERE flow_rate>=1 ORDER BY id DESC LIMIT 1;`;
+  db.query(query, function (err, result, fields) {
+    if (err) throw console.error(err);
+    res.send(result);
+  });
+});
+
 module.exports = router;

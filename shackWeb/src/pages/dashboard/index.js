@@ -1,104 +1,31 @@
 import { useEffect, useState } from 'react';
 
 // material-ui
-import {
-    Avatar,
-    AvatarGroup,
-    Box,
-    Button,
-    Grid,
-    List,
-    ListItemAvatar,
-    ListItemButton,
-    ListItemSecondaryAction,
-    ListItemText,
-    MenuItem,
-    Stack,
-    TextField,
-    Typography
-} from '@mui/material';
+import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 
 // project import
-import OrdersTable from './OrdersTable';
 import ShackDataChart from './IncomeAreaChart';
-import MonthlyBarChart from './MonthlyBarChart';
-import ReportAreaChart from './ReportAreaChart';
-import SalesColumnChart from './SalesColumnChart';
 import MainCard from 'components/MainCard';
 import SensorReading from 'components/cards/peripherals/SensorReading';
-
-// assets
-import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
-import avatar1 from 'assets/images/users/avatar-1.png';
-import avatar2 from 'assets/images/users/avatar-2.png';
-import avatar3 from 'assets/images/users/avatar-3.png';
-import avatar4 from 'assets/images/users/avatar-4.png';
-
-// api
-import SensorApi from 'api/SensorApi';
-import { date } from '../../../node_modules/yup/lib/locale';
-
-// avatar style
-const avatarSX = {
-    width: 36,
-    height: 36,
-    fontSize: '1rem'
-};
-
-// action style
-const actionSX = {
-    mt: 0.75,
-    ml: 1,
-    top: 'auto',
-    right: 'auto',
-    alignSelf: 'flex-start',
-    transform: 'none'
-};
-
-// sales report status
-const status = [
-    {
-        value: 'today',
-        label: 'Today'
-    },
-    {
-        value: 'month',
-        label: 'This Month'
-    },
-    {
-        value: 'year',
-        label: 'This Year'
-    }
-];
-
-function getData() {
-    let temperature = 0;
-    let humidity = 0;
-    let flow = 0;
-    fetch('http://raspberrypi.local:3001/data/lastItem')
-        .then((response) => response.json())
-        .then((json) => {
-            if (json.temperature && json.humidity) {
-                let date = new Date(json[i].datetime);
-                console.log(date);
-                temperature = json.temperature;
-                humidity = json.humidity;
-                flow = json.flow * 10;
-                console.log(json.flow, '    :     ', flow);
-            }
-            return { temperature: temperature, humidity: humidity, flow: flow };
-        });
-}
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const DashboardDefault = () => {
-    const [value, setValue] = useState('today');
     const [slot, setSlot] = useState('day');
     const [temperature, setTemp] = useState();
     const [humidity, setHumidity] = useState();
-    const [flow, setFlow] = useState();
+    const [flow, setFlow] = useState({ date: 1, flow_rate: 10 });
     const [lastPic, setLastPic] = useState('loading_gif.gif');
+
+    function lastFlow(json) {
+        for (var i = 0; i < json.length; i++) {
+            console.log(json[i]);
+            if (json[i].flow_rate > 0) {
+                console.log(json[i]);
+                return { date: 0, flow_rate: json[i].flow_rate };
+            }
+        }
+    }
 
     useEffect(() => {
         fetch('http://raspberrypi.local:3001/data/lastItem')
@@ -107,20 +34,21 @@ const DashboardDefault = () => {
                 if (json) {
                     setTemp(json[0].temperature);
                     setHumidity(json[0].humidity);
-                    setFlow(json[0].flow_rate);
                 }
             });
         fetch('http://raspberrypi.local:3001/lastPicture')
             .then((response) => response.json())
             .then((json) => {
                 setLastPic(json.lastPic);
-                console.log(lastPic);
             });
     });
 
     function takePicture() {
-        console.log('picture');
-        fetch('http://camerapi.local:5000/takePicture');
+        fetch('http://camerapi.local:5000/takePicture').then((response) =>
+            response.json().then((json) => {
+                setLastPic(json.fileName);
+            })
+        );
     }
 
     return (
@@ -174,7 +102,10 @@ const DashboardDefault = () => {
             <Grid item xs={12} md={5} lg={4}>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
-                        <Typography variant="h5">Tent Photo</Typography>
+                        <Typography variant="h5">
+                            Tent Photo Taken:&nbsp;
+                            {lastPic.slice(0, -4).slice(0, 19).replace(/-/g, '/').replace('T', ' ')}
+                        </Typography>
                     </Grid>
                     <Grid item>
                         <Button
