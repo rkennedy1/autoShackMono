@@ -25,8 +25,7 @@ import MainCard from 'components/MainCard';
 import Transitions from 'components/@extended/Transitions';
 
 // assets
-import { BellOutlined, CloseOutlined, GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
-import { ListItem } from '../../../../../node_modules/@mui/material/index';
+import { BellOutlined, CloseOutlined, GiftOutlined, MessageOutlined } from '@ant-design/icons';
 
 // sx styles
 const avatarSX = {

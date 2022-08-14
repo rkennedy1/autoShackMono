@@ -14,18 +14,10 @@ const DashboardDefault = () => {
     const [slot, setSlot] = useState('day');
     const [temperature, setTemp] = useState();
     const [humidity, setHumidity] = useState();
-    const [flow, setFlow] = useState({ date: 1, flow_rate: 10 });
+    const [flow, setFlow] = useState([
+        { id: 0, datetime: '2022-08-14T13:03:03.000Z', humidity: 0, temperature: 0, flow_rate: 0, pump_status: 'OFF', execution_time: 0 }
+    ]);
     const [lastPic, setLastPic] = useState('loading_gif.gif');
-
-    function lastFlow(json) {
-        for (var i = 0; i < json.length; i++) {
-            console.log(json[i]);
-            if (json[i].flow_rate > 0) {
-                console.log(json[i]);
-                return { date: 0, flow_rate: json[i].flow_rate };
-            }
-        }
-    }
 
     useEffect(() => {
         fetch('http://raspberrypi.local:3001/data/lastItem')
@@ -40,6 +32,11 @@ const DashboardDefault = () => {
             .then((response) => response.json())
             .then((json) => {
                 setLastPic(json.lastPic);
+            });
+        fetch('http://raspberrypi.local:3001/data/lastFlow')
+            .then((response) => response.json())
+            .then((json) => {
+                setFlow(json);
             });
     });
 
@@ -62,6 +59,9 @@ const DashboardDefault = () => {
             </Grid>
             <Grid item xs={3}>
                 <SensorReading title="Humidity" value={humidity} percentage={humidity} />
+            </Grid>
+            <Grid item xs={3}>
+                <SensorReading title="Last Flow" value={flow[0].datetime.slice(0, 19).replace(/-/g, '/').replace('T', ' ')} />
             </Grid>
 
             <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
