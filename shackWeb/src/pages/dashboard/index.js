@@ -8,6 +8,9 @@ import ShackDataChart from './IncomeAreaChart';
 import MainCard from 'components/MainCard';
 import SensorReading from 'components/cards/peripherals/SensorReading';
 
+const serverUrl = 'http://localhost:3001';
+const camerapiUrl = 'http://camerapi.local:5000';
+
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const DashboardDefault = () => {
@@ -20,7 +23,7 @@ const DashboardDefault = () => {
     const [lastPic, setLastPic] = useState('loading_gif.gif');
 
     useEffect(() => {
-        fetch('http://raspberrypi.local:3001/data/lastItem')
+        fetch(serverUrl + '/data/lastItem')
             .then((response) => response.json())
             .then((json) => {
                 if (json) {
@@ -28,20 +31,20 @@ const DashboardDefault = () => {
                     setHumidity(json[0].humidity);
                 }
             });
-        fetch('http://raspberrypi.local:3001/lastPicture')
+        fetch(serverUrl + '/lastPicture')
             .then((response) => response.json())
             .then((json) => {
                 setLastPic(json.lastPic);
             });
-        fetch('http://raspberrypi.local:3001/data/lastFlow')
+        fetch(serverUrl + '/data/lastFlow')
             .then((response) => response.json())
             .then((json) => {
                 setFlow(json);
             });
-    });
+    }, []);
 
     function takePicture() {
-        fetch('http://camerapi.local:5000/takePicture').then((response) =>
+        fetch(camerapiUrl + '/takePicture').then((response) =>
             response.json().then((json) => {
                 setLastPic(json.fileName);
             })
@@ -99,36 +102,33 @@ const DashboardDefault = () => {
                     </Box>
                 </MainCard>
             </Grid>
-            <Grid item xs={12} md={5} lg={4}>
-                <Grid container alignItems="center" justifyContent="space-between">
-                    <Grid item>
-                        <Typography variant="h5">
-                            Tent Photo Taken:&nbsp;
-                            {lastPic.slice(0, -4).slice(0, 19).replace(/-/g, '/').replace('T', ' ')}
-                        </Typography>
+            {lastPic && (
+                <Grid item xs={12} md={5} lg={4}>
+                    <Grid container alignItems="center" justifyContent="space-between">
+                        <Grid item>
+                            <Typography variant="h5">
+                                Tent Photo Taken:&nbsp;
+                                {lastPic.slice(0, -4).slice(0, 19).replace(/-/g, '/').replace('T', ' ')}
+                            </Typography>
+                        </Grid>
+                        <Grid item>
+                            <Button
+                                size="small"
+                                variant="outlined"
+                                onClick={() => {
+                                    takePicture();
+                                }}
+                            >
+                                Take Photo
+                            </Button>
+                        </Grid>
                     </Grid>
-                    <Grid item>
-                        <Button
-                            size="small"
-                            variant="outlined"
-                            onClick={() => {
-                                takePicture();
-                            }}
-                        >
-                            Take Photo
-                        </Button>
-                    </Grid>
+                    <MainCard sx={{ mt: 2 }} content={false}>
+                        <Box sx={{ p: 3, pb: 0 }}></Box>
+                        <img src={serverUrl + `/images/${lastPic}`} alt="Last One Taken in the Tent" width="400" height="400" />
+                    </MainCard>
                 </Grid>
-                <MainCard sx={{ mt: 2 }} content={false}>
-                    <Box sx={{ p: 3, pb: 0 }}></Box>
-                    <img
-                        src={`http://raspberrypi.local:3001/images/${lastPic}`}
-                        alt="Last One Taken in the Tent"
-                        width="400"
-                        height="400"
-                    />
-                </MainCard>
-            </Grid>
+            )}
         </Grid>
     );
 };
