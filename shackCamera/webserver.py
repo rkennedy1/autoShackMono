@@ -9,7 +9,7 @@ cam = Cam()
 
 cors = CORS(app, resource={
     r"*":{
-         "origins":"raspberrypi.local"
+         "origins":"shackpi.local"
     }
 })
 
