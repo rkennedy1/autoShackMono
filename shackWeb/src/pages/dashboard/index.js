@@ -7,6 +7,7 @@ import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import ShackDataChart from './IncomeAreaChart';
 import MainCard from 'components/MainCard';
 import SensorReading from 'components/cards/peripherals/SensorReading';
+import { date } from '../../../node_modules/yup/lib/locale';
 
 const serverUrl = 'http://guestserver.local:3001';
 const camerapiUrl = 'http://camerapi.local:5000';
@@ -51,6 +52,15 @@ const DashboardDefault = () => {
         );
     }
 
+    function formatDate(dateParm) {
+        date = new Date(Date.parse(dateParm));
+        date.setHours(date.getHours() + 8);
+        return date.toLocaleString();
+    }
+
+    //flow[0].datetime.slice(0, 19).replace(/-/g, '/').replace('T', ' ')
+    //new Date(Date.parse(flow[0].datetime)).toLocaleString()
+
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
             {/* row 1 */}
@@ -64,7 +74,7 @@ const DashboardDefault = () => {
                 <SensorReading title="Humidity" value={humidity} percentage={humidity} />
             </Grid>
             <Grid item xs={3}>
-                <SensorReading title="Last Flow" value={flow[0].datetime.slice(0, 19).replace(/-/g, '/').replace('T', ' ')} />
+                <SensorReading title="Last Flow" value={formatDate(flow[0].datetime)} />
             </Grid>
 
             <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
@@ -108,7 +118,7 @@ const DashboardDefault = () => {
                         <Grid item>
                             <Typography variant="h5">
                                 Tent Photo Taken:&nbsp;
-                                {lastPic.slice(0, -4).slice(0, 19).replace(/-/g, '/').replace('T', ' ')}
+                                {formatDate(lastPic.slice(0, -4))}
                             </Typography>
                         </Grid>
                         <Grid item>
