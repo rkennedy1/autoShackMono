@@ -6,6 +6,7 @@ import { useTheme } from '@mui/material/styles';
 
 // third-party
 import ReactApexChart from 'react-apexcharts';
+import { date } from '../../../node_modules/yup/lib/locale';
 
 // chart options
 const areaChartOptions = {
@@ -66,6 +67,12 @@ const ShackDataChart = ({ slot }) => {
         }
     ]);
 
+    function formatDate(dateParm) {
+        date = new Date(Date.parse(dateParm));
+        date.setHours(date.getHours() + 8);
+        return date.toLocaleString();
+    }
+
     useEffect(() => {
         let dates = [];
         fetch('http://guestserver.local:3001/data/lastDay')
@@ -76,8 +83,7 @@ const ShackDataChart = ({ slot }) => {
                 let flows = [];
                 json.map((entry) => {
                     if (entry.datetime) {
-                        let date = new Date(entry.datetime);
-                        dates.push(date.toISOString().slice(0, 19).replace(/-/g, '/').replace('T', ' '));
+                        dates.push(formatDate(entry.datetime));
                         temps.push(entry.temperature);
                         humiditys.push(entry.humidity);
                         flows.push(entry.flow_rate * 10);
