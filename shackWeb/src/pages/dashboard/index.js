@@ -8,7 +8,7 @@ import ShackDataChart from './IncomeAreaChart';
 import MainCard from 'components/MainCard';
 import SensorReading from 'components/cards/peripherals/SensorReading';
 
-const serverUrl = 'http://10.0.0.50:3001';
+const serverUrl = 'http://guestserver.local:3001';
 const camerapiUrl = 'http://camerapi.local:5000';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
