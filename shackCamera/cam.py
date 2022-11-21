@@ -22,8 +22,8 @@ class Cam:
 
 
     def pushPicture(self):
-        os.system("sshpass -p {} scp ~/autoShackMono/shackCamera/pics/{} pi@raspberrypi.local:~/autoShackMono/shackServer/images/{}".format(os.getenv('PASSWORD'), self.fileName, self.fileName))
-        url = 'http://raspberrypi.local:3001/lastPicture'
+        os.system("scp ~/autoShackMono/shackCamera/pics/{} ryan@guestserver.local:~/autoShackMono/shackServer/images/{}".format(self.fileName, self.fileName))
+        url = 'http://guestserver.local:3001/lastPicture'
         requests.post(url, data={'fileName': self.fileName}, timeout=5)
         return
 
