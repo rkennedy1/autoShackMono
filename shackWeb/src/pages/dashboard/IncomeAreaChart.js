@@ -68,7 +68,7 @@ const ShackDataChart = ({ slot }) => {
 
     useEffect(() => {
         let dates = [];
-        fetch('http://10.0.0.50:3001/data/lastDay')
+        fetch('http://127.0.0.1:3001:3001/data/lastDay')
             .then((response) => response.json())
             .then((json) => {
                 let temps = [];
