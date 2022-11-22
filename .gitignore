@@ -126,6 +126,9 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# Snyk
+.dccache
+
 __pycache__/
 
 shack.config.json
