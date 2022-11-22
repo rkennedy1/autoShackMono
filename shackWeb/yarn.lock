@@ -1325,7 +1325,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/sheet/-/sheet-1.2.1.tgz#0767e0305230e894897cadb6c8df2c51e61a6c2c"
   integrity sha512-zxRBwl93sHMsOj4zs+OslQKg/uhF38MB+OMKoCrVuS0nyTkqnau+BM3WGEoOptg9Oz45T/aIGs1qbVAsEFo3nA==
 
-"@emotion/styled@^11.6.0":
+"@emotion/styled@^11.10.5":
   version "11.10.5"
   resolved "https://registry.yarnpkg.com/@emotion/styled/-/styled-11.10.5.tgz#1fe7bf941b0909802cb826457e362444e7e96a79"
   integrity sha512-8EP6dD7dMkdku2foLoruPCNkRevzdcBaY6q0l0OsbyJK+x8D9HWjX27ARiSIKNF634hY9Zdoedh8bJCiva8yZw==
@@ -1769,7 +1769,7 @@
     prop-types "^15.8.1"
     react-is "^18.2.0"
 
-"@mui/material@^5.10.8":
+"@mui/material@^5.10.12":
   version "5.10.14"
   resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.10.14.tgz#fcd687c92b22a71dc139376a5bc2d0bc578a172b"
   integrity sha512-HWzKVAykePMx54WtxVwZyL1W4k3xlHYIqwMw0CaXAvgB3UE9yjABZuuGr8vG5Z6CSNWamzd+s1x8u7pQPFl9og==
@@ -2110,7 +2110,7 @@
     lz-string "^1.4.4"
     pretty-format "^26.6.2"
 
-"@testing-library/jest-dom@^5.11.4":
+"@testing-library/jest-dom@^5.16.5":
   version "5.16.5"
   resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-5.16.5.tgz#3912846af19a29b2dbf32a6ae9c31ef52580074e"
   integrity sha512-N5ixQ2qKpi5OLYfwQmUb/5mSV9LneAcaUfp32pn4yCnpb8r/Yz0pXFPck21dIicKmi+ta5WRAknkZCfA8refMA==
@@ -2362,7 +2362,7 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.9.tgz#02d013de7058cea16d36168ef2fc653464cfbad4"
   integrity sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==
 
-"@types/node@^16.11.45":
+"@types/node@^16.18.3":
   version "16.18.3"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.18.3.tgz#d7f7ba828ad9e540270f01ce00d391c54e6e0abc"
   integrity sha512-jh6m0QUhIRcZpNv7Z/rpN+ZWXOicUUQbSoWks7Htkbb9IjFQj4kzcX/xFCkjstCj5flMsN8FiSvt+q+Tcs4Llg==
@@ -4677,6 +4677,7 @@ eslint-plugin-react-hooks@^4.3.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.6.0.tgz#4c3e697ad95b77e93f8646aaa1630c1ba607edd3"
   integrity sha512-oFc7Itz9Qxh2x4gNHStv3BqJq54ExXmfC+a1NjAta66IAN87Wu0R/QArgIS9qKzX3dXKPI9H5crl9QchNMY9+g==
+
 "eslint-plugin-react-hooks@^5.0.0-next-fecc288b7-20221025 ":
   version "5.0.0-next-fecc288b7-20221025"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-5.0.0-next-fecc288b7-20221025.tgz#4fa9deacd62615855f1688d18fbeae4b983192e7"
@@ -9150,7 +9151,7 @@ signal-exit@^3.0.2, signal-exit@^3.0.3:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.7.tgz#a9a1767f8af84155114eaabd73f99273c8f59ad9"
   integrity sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==
 
-simplebar-react@^2.3.6:
+simplebar-react@^2.4.3:
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/simplebar-react/-/simplebar-react-2.4.3.tgz#79c830711c23a5ae457ef73420f5752d4a1b3133"
   integrity sha512-Ep8gqAUZAS5IC2lT5RE4t1ZFUIVACqbrSRQvFV9a6NbVUzXzOMnc4P82Hl8Ak77AnPQvmgUwZS7aUKLyBoMAcg==
