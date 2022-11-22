@@ -9,7 +9,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-let lastPicture = "loading_gif.gif";
+let lastPicture = "";
 
 app.listen(process.env.PORT, () =>
   console.log("API is running on port ", process.env.PORT)
