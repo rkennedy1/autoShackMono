@@ -21,12 +21,10 @@ class Database():
         sql = (
         f"INSERT INTO shacklog (datetime, humidity, temperature, flow_rate, pump_status, execution_time)"
         f" VALUES (\"{data['datetime']}\", {data['humidity']}, {data['temperature']}, {data['flow_rate']}, \"{data['pump_status']}\", 0)"
-        #f"ON DUPLICATE KEY UPDATE datetime={data['datetime']},humidity={data['humidity']},temperature={data['temperature']}, flow_rate={data['flow_rate']}, pump_status={data['pump_status']}"
         )
-#        print(sql)
+        #print(sql)
         self.cursor.execute(sql)
         self.db.commit()
-#        print(data)
 
 def main():
     lines = []

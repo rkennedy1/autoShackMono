@@ -69,7 +69,7 @@ class AutoShack:
     #             f.write(json.dumps(payload['payload']))
     #             f.close()
 
-    def getConfigurationData(self):
+    def getConfigurationDataFromFile(self):
         self.desiredPumpStateOn = False
         configurationData = []
         # get the current directory so that we can get the configuration file
@@ -121,7 +121,7 @@ def main():
     A1 = AutoShack()
     data = []
     try:
-        while(True):
+        while (True):
             # Every Minute
             if (datetime.now().second == 0):
                 # average over 1 minute
@@ -136,7 +136,7 @@ def main():
                                str(A1.flowSensor.flow))
 
                 # Get the confifuation file and see if pump should be on
-                A1.getConfigurationData()
+                A1.getConfigurationDataFromFile()
 
                 # Turn the pump ON or OFF depending on configuration and current flow
                 A1.setPumpState()
