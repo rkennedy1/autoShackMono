@@ -2,33 +2,67 @@ import time
 import mysql.connector
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
 
-def getConfigurationDataFromDB():
-    db = mysql.connector.connect(
-        host=os.getenv('MYSQL_HOST'),
-        user=os.getenv('MYSQL_USER'),
-        password=os.getenv('MYSQL_PASSWORD'),
-        database=os.getenv('MYSQL_DATABASE')
-    )
-    cursor = db.cursor()
-    desiredPumpStateOn = False
+class ConfigData:
+    def __init__(self):
+        self.scheduleData = []
+        desiredPumpStateOn = False
 
-    cursor.execute('SELECT * FROM shackSchedule')
-    data = cursor.fetchall()
-    configurationData = []
-    for line in data:
-        configurationData.append(
-            {'id': line[0], 'startHour': line[1], 'duration': line[2]})
-    print(configurationData)
-    return (configurationData)
+    def getConfigurationDataFromDB(self):
+        db = mysql.connector.connect(
+            host=os.getenv('MYSQL_HOST'),
+            user=os.getenv('MYSQL_USER'),
+            password=os.getenv('MYSQL_PASSWORD'),
+            database=os.getenv('MYSQL_DATABASE')
+        )
+        cursor = db.cursor()
+        self.desiredPumpStateOn = False
+
+        cursor.execute('SELECT * FROM shackSchedule')
+        data = cursor.fetchall()
+        configurationData = []
+        for line in data:
+            configurationData.append(
+                {'id': line[0], 'startHour': line[1], 'duration': line[2]})
+        self.scheduleData = configurationData
+        print(self.scheduleData)
+
+    def getConfigurationDataFromFile(self):
+        self.desiredPumpStateOn = False
+        configurationData = []
+        # get the current directory so that we can get the configuration file
+
+        with open(self.ROOT_DIR+'/shack.config.json') as f:
+            configurationData = json.load(f)
+            f.close()
+        self.scheduleData = configurationData["events"]
+
+    def setDesiredPumpState(self):
+        for item in self.scheduleData:
+            # initialize start time with current time to get the data component
+            curTime = datetime.now()
+            start_time = curTime
+            start_time = start_time.replace(
+                hour=item["startHour"], minute=item["start_minute"])
+            # initialize end time with current time to get the data component
+            duration = item["duration"]
+            end_time = start_time
+            end_time = end_time.replace(minute=start_time.minute+duration)
+            if start_time <= curTime < end_time:
+                self.desiredPumpStateOn = True
 
 
 if __name__ == "__main__":
     s = time.perf_counter()
     elapsed = time.perf_counter() - s
-    getConfigurationDataFromDB()
+    data = ConfigData()
+    data.getConfigurationDataFromDB()
+    data.setDesiredPumpState()
+    print(data.scheduleData)
+    print(data.desiredPumpStateOn)
     print(f"{__file__} executed in {elapsed:0.2f} seconds.")
     print("End AutoShack")
