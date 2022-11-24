@@ -14,11 +14,9 @@ router.get("/", function (req, res) {
   });
 });
 
-router.post("/", function (req, res) {
-  let query = `INSERT INTO shackSchedule (startHour, startMinute, duration)
-    VALUES(${req.body.startHour}, ${req.body.startMinute}, ${req.body.duration})
-    ON DUPLICATE KEY UPDATE startHour=${req.body.startHour},
-    startMinute=${req.body.startMinute}, duration=${req.body.duration}`;
+router.post("/update", function (req, res) {
+  let query = `UPDATE shackSchedule SET startHour=${req.body.startHour}, duration=${req.body.duration} WHERE id=${req.body.id}`;
+  console.log(query);
   db.query(query, function (err, result, fields) {
     if (err) throw console.error(err);
     res.send(result);
