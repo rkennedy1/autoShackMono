@@ -29,7 +29,7 @@ class ConfigData:
             configurationData.append(
                 {'id': line[0], 'startHour': line[1], 'duration': line[2]})
         self.scheduleData = configurationData
-        print(self.scheduleData)
+        # print(self.scheduleData)
 
     def getConfigurationDataFromFile(self):
         self.desiredPumpStateOn = False
