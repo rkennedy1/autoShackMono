@@ -2,18 +2,16 @@
 from logging.handlers import TimedRotatingFileHandler
 from operator import truediv
 from humidityTempSensor import HumidityTempSensor
-# from shackPubSub import shackPubSub
 import board
 from pump import Pump
 from flow import FlowSensor
 from sqlDatabase import Database
 import time
-import json
 from datetime import datetime
 import os
 import logging
 from pythonjsonlogger import jsonlogger
-import argparse
+from configData import ConfigData
 
 
 class AutoShack:
@@ -51,56 +49,16 @@ class AutoShack:
         self.pump = Pump(18, self.logger)
         self.pump_status = 'unchanged'
         self.db = Database()
-        # self.shackPubSub = shackPubSub(messageHandler=self.messageHandler)
-        # self.shackPubSub.subscribeTopic('autoshack')
+        self.config = ConfigData()
 
-    # def messageHandler(self, topic, payload):
-    #     payload = json.loads(payload)
-    #     print('topic1231312: ', topic, ' msg: ', payload)
-    #     if payload['type'] == 'getConfig':
-    #         configurationData = []
-    #         with open(self.ROOT_DIR+'/shack.config.json') as f:
-    #             configurationData = json.load(f)
-    #             f.close()
-    #         self.shackPubSub.publishMessage(
-    #             {'type': 'publishConfig', 'payload': configurationData})
-    #     elif payload['type'] == 'putConfig':
-    #         with open(self.ROOT_DIR+'/shack.config.json', 'w') as f:
-    #             f.write(json.dumps(payload['payload']))
-    #             f.close()
-
-    def getConfigurationData(self):
-        self.desiredPumpStateOn = False
-        configurationData = []
-        # get the current directory so that we can get the configuration file
-
-        with open(self.ROOT_DIR+'/shack.config.json') as f:
-            configurationData = json.load(f)
-            f.close()
-        for configurationItem in configurationData["events"]:
-            # initialize start time with current time to get the data component
-            curTime = datetime.now()
-            start_time = curTime
-            start_time = start_time.replace(
-                hour=configurationItem["start_hour"], minute=configurationItem["start_minute"])
-            # initialize end time with current time to get the data component
-            duration = configurationItem["duration"]
-            end_time = start_time
-            end_time = end_time.replace(minute=start_time.minute+duration)
-            if start_time <= curTime < end_time:
-                self.desiredPumpStateOn = True
-
-    # This function sets the pump state based on the values in
-    # self.desiredPumStateOn  and self.FlowSensor.flow
-
-    def setPumpState(self):
-        if self.desiredPumpStateOn and self.flowSensor.flow == 0:
+    def setPumpState(self, pumpState):
+        if pumpState and self.flowSensor.flow == 0:
             # Pump should be on but no flow -> turn it ON
             self.pump.pumpOn()
             self.logger.info("Pump turned ON")
             self.pump_status = "ON"
             # Pump should not be on but flow -> turn OFF
-        elif (not self.desiredPumpStateOn) and self.flowSensor.flow > 0:
+        elif (not pumpState) and self.flowSensor.flow > 0:
             self.pump.pumpOff()
             self.logger.info("Pump turned OFF")
             self.pump_status = "OFF"
@@ -121,7 +79,7 @@ def main():
     A1 = AutoShack()
     data = []
     try:
-        while(True):
+        while (True):
             # Every Minute
             if (datetime.now().second == 0):
                 # average over 1 minute
@@ -136,11 +94,11 @@ def main():
                                str(A1.flowSensor.flow))
 
                 # Get the confifuation file and see if pump should be on
-                A1.getConfigurationData()
+                A1.config.getConfigurationDataFromDB()
+                A1.config.setDesiredPumpState()
 
                 # Turn the pump ON or OFF depending on configuration and current flow
-                A1.setPumpState()
-
+                A1.setPumpState(A1.config.desiredPumpStateOn)
                 data = {
                     'datetime': datetime.now(),
                     'humidity': A1.tempHumiditySensor.humidity,

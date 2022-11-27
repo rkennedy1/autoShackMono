@@ -10,23 +10,21 @@ ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 class Database():
     def __init__(self):
         self.db = mysql.connector.connect(
-          host=os.getenv('MYSQL_HOST'),
-          user=os.getenv('MYSQL_USER'),
-          password=os.getenv('MYSQL_PASSWORD'),
-          database=os.getenv('MYSQL_DATABASE')
+            host=os.getenv('MYSQL_HOST'),
+            user=os.getenv('MYSQL_USER'),
+            password=os.getenv('MYSQL_PASSWORD'),
+            database=os.getenv('MYSQL_DATABASE')
         )
         self.cursor = self.db.cursor()
 
     def insertData(self, data):
         sql = (
-        f"INSERT INTO shacklog (datetime, humidity, temperature, flow_rate, pump_status, execution_time)"
-        f" VALUES (\"{data['datetime']}\", {data['humidity']}, {data['temperature']}, {data['flow_rate']}, \"{data['pump_status']}\", 0)"
-        #f"ON DUPLICATE KEY UPDATE datetime={data['datetime']},humidity={data['humidity']},temperature={data['temperature']}, flow_rate={data['flow_rate']}, pump_status={data['pump_status']}"
+            f"INSERT INTO shacklog (datetime, humidity, temperature, flow_rate, pump_status, execution_time)"
+            f" VALUES (\"{data['datetime']}\", {data['humidity']}, {data['temperature']}, {data['flow_rate']}, \"{data['pump_status']}\", 0)"
         )
-#        print(sql)
         self.cursor.execute(sql)
         self.db.commit()
-#        print(data)
+
 
 def main():
     lines = []
@@ -58,6 +56,7 @@ def main():
         print("Added ", len(entries), " entries to the database")
     else:
         print("Failed to add data to the database")
+
 
 if __name__ == "__main__":
     main()

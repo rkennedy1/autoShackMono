@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
-import time, sys
-import logging
+import time
+
 
 class FlowSensor:
     def __init__(self, pin, logger):
@@ -12,14 +12,14 @@ class FlowSensor:
         self.setup()
 
     def countPulse(self, channel):
-       if self.start_counter:
-          self.count = self.count+1        
-          self.flow = self.count / (60 * 7.5)
+        if self.start_counter:
+            self.count = self.count+1
+            self.flow = self.count / (60 * 7.5)
 
     def setup(self):
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
-        GPIO.setup(self.pin, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+        GPIO.setup(self.pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(self.pin, GPIO.FALLING, callback=self.countPulse)
 
     def getFlow(self):

@@ -1,8 +1,6 @@
 #import board
 import adafruit_dht
 import time
-import signal
-import logging
 
 
 def handler(signum, frame):
