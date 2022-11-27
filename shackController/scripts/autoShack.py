@@ -14,7 +14,7 @@ import os
 import logging
 from pythonjsonlogger import jsonlogger
 import argparse
-from configData import configData
+from ConfigData import ConfigData
 
 
 class AutoShack:
@@ -52,6 +52,7 @@ class AutoShack:
         self.pump = Pump(18, self.logger)
         self.pump_status = 'unchanged'
         self.db = Database()
+        self.config = ConfigData()
         # self.shackPubSub = shackPubSub(messageHandler=self.messageHandler)
         # self.shackPubSub.subscribeTopic('autoshack')
 
@@ -137,12 +138,11 @@ def main():
                                str(A1.flowSensor.flow))
 
                 # Get the confifuation file and see if pump should be on
-                config = configData()
-                config.getConfigurationDataFromDB()
-                config.setDesiredPumpState
+                A1.config.getConfigurationDataFromDB()
+                A1.config.setDesiredPumpState
 
                 # Turn the pump ON or OFF depending on configuration and current flow
-                A1.setPumpState(config.desiredPumpStateOn)
+                A1.setPumpState(A1.config.desiredPumpStateOn)
                 data = {
                     'datetime': datetime.now(),
                     'humidity': A1.tempHumiditySensor.humidity,
