@@ -1,5 +1,4 @@
 import RPi.GPIO as GPIO
-import time
 import asyncio
 import logging
 
@@ -27,6 +26,6 @@ class Pump:
         for i in range(duration):
             self.logger.info('.', end=" ", flush=True)
             await asyncio.sleep(1)
-        
+
         self.logger.info("PUMP OFF")
         self.pumpOff()

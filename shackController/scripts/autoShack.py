@@ -2,18 +2,15 @@
 from logging.handlers import TimedRotatingFileHandler
 from operator import truediv
 from humidityTempSensor import HumidityTempSensor
-# from shackPubSub import shackPubSub
 import board
 from pump import Pump
 from flow import FlowSensor
 from sqlDatabase import Database
 import time
-import json
 from datetime import datetime
 import os
 import logging
 from pythonjsonlogger import jsonlogger
-import argparse
 from configData import ConfigData
 
 
@@ -53,47 +50,6 @@ class AutoShack:
         self.pump_status = 'unchanged'
         self.db = Database()
         self.config = ConfigData()
-        # self.shackPubSub = shackPubSub(messageHandler=self.messageHandler)
-        # self.shackPubSub.subscribeTopic('autoshack')
-
-    # def messageHandler(self, topic, payload):
-    #     payload = json.loads(payload)
-    #     print('topic1231312: ', topic, ' msg: ', payload)
-    #     if payload['type'] == 'getConfig':
-    #         configurationData = []
-    #         with open(self.ROOT_DIR+'/shack.config.json') as f:
-    #             configurationData = json.load(f)
-    #             f.close()
-    #         self.shackPubSub.publishMessage(
-    #             {'type': 'publishConfig', 'payload': configurationData})
-    #     elif payload['type'] == 'putConfig':
-    #         with open(self.ROOT_DIR+'/shack.config.json', 'w') as f:
-    #             f.write(json.dumps(payload['payload']))
-    #             f.close()
-
-    # def getConfigurationDataFromFile(self):
-    #     self.desiredPumpStateOn = False
-    #     configurationData = []
-    #     # get the current directory so that we can get the configuration file
-
-    #     with open(self.ROOT_DIR+'/shack.config.json') as f:
-    #         configurationData = json.load(f)
-    #         f.close()
-    #     for configurationItem in configurationData["events"]:
-    #         # initialize start time with current time to get the data component
-    #         curTime = datetime.now()
-    #         start_time = curTime
-    #         start_time = start_time.replace(
-    #             hour=configurationItem["start_hour"], minute=configurationItem["start_minute"])
-    #         # initialize end time with current time to get the data component
-    #         duration = configurationItem["duration"]
-    #         end_time = start_time
-    #         end_time = end_time.replace(minute=start_time.minute+duration)
-    #         if start_time <= curTime < end_time:
-    #             self.desiredPumpStateOn = True
-
-    # This function sets the pump state based on the values in
-    # self.desiredPumStateOn  and self.FlowSensor.flow
 
     def setPumpState(self, pumpState):
         if pumpState and self.flowSensor.flow == 0:
