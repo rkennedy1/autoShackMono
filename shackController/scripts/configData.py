@@ -43,15 +43,15 @@ class ConfigData:
 
     def setDesiredPumpState(self):
         for item in self.scheduleData:
-            # initialize start time with current time to get the data component
+            # initialize start time with current time
             curTime = datetime.now()
             start_time = curTime
             start_time = start_time.replace(
-                hour=item["startHour"], minute=item["start_minute"])
-            # initialize end time with current time to get the data component
+                hour=item["startHour"], minute=0)
+            # initialize end time with start time
             duration = item["duration"]
             end_time = start_time
-            end_time = end_time.replace(minute=start_time.minute+duration)
+            end_time = end_time.replace(minute=duration)
             if start_time <= curTime < end_time:
                 self.desiredPumpStateOn = True
 
