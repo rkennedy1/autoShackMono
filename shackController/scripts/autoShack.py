@@ -14,7 +14,7 @@ import os
 import logging
 from pythonjsonlogger import jsonlogger
 import argparse
-import configData from configData
+from configData import configData
 
 
 class AutoShack:
