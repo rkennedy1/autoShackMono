@@ -10,7 +10,7 @@
         "@emotion/styled": "^11.10.5",
         "@mui/lab": "^5.0.0-alpha.65",
         "@mui/material": "^5.10.15",
-        "@mui/styles": "^5.10.10",
+        "@mui/styles": "^5.10.15",
         "@reduxjs/toolkit": "^1.8.6",
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^11.1.0",
