@@ -43,7 +43,7 @@ const areaChartOptions = {
 //     return resDates;
 // }
 
-// ==============================|| INCOME AREA CHART ||============================== //
+// ==============================|| SHACK DATA CHART ||============================== //
 
 const ShackDataChart = ({ slot }) => {
     const theme = useTheme();

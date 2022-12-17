@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 
 // project import
-import ShackDataChart from './IncomeAreaChart';
+import ShackDataChart from './ShackDataChart';
 import MainCard from 'components/MainCard';
 import SensorReading from 'components/cards/peripherals/SensorReading';
 import { date } from '../../../node_modules/yup/lib/locale';
