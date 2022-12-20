@@ -1,12 +1,13 @@
 import smtplib
 import ssl
 import os
+import subprocess
 from dotenv import load_dotenv
 load_dotenv()
 
 
 def ping(hostname):
-    return os.system("ping -c 1 " + hostname) == 0
+    return subprocess.call("ping -c 1 " + hostname, shell=False) == 0
 
 
 def sendEmail(hostname):
