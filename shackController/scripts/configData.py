@@ -3,14 +3,13 @@ import mysql.connector
 import os
 from dotenv import load_dotenv
 from datetime import datetime
-
+import json
 load_dotenv()
 
 
 class ConfigData:
     def __init__(self):
         self.scheduleData = []
-        desiredPumpStateOn = False
 
     def getConfigurationDataFromDB(self):
         db = mysql.connector.connect(
@@ -25,9 +24,10 @@ class ConfigData:
         cursor.execute('SELECT * FROM shackSchedule')
         data = cursor.fetchall()
         configurationData = []
+        # print(data)
         for line in data:
             configurationData.append(
-                {'id': line[0], 'startHour': line[1], 'duration': line[2]})
+                {'id': line[0], 'start_hour': int(line[1]), 'duration': int(line[2])})
         self.scheduleData = configurationData
         # print(self.scheduleData)
 
@@ -35,8 +35,7 @@ class ConfigData:
         self.desiredPumpStateOn = False
         configurationData = []
         # get the current directory so that we can get the configuration file
-
-        with open(self.ROOT_DIR+'/shack.config.json') as f:
+        with open(os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))+'/shack.config.json') as f:
             configurationData = json.load(f)
             f.close()
         self.scheduleData = configurationData["events"]
@@ -47,7 +46,7 @@ class ConfigData:
             curTime = datetime.now()
             start_time = curTime
             start_time = start_time.replace(
-                hour=item["startHour"], minute=0)
+                hour=item["start_hour"], minute=0)
             # initialize end time with start time
             duration = item["duration"]
             end_time = start_time
