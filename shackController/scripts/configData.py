@@ -35,7 +35,6 @@ class ConfigData:
         self.desiredPumpStateOn = False
         configurationData = []
         # get the current directory so that we can get the configuration file
-        print(os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
         with open(os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))+'/shack.config.json') as f:
             configurationData = json.load(f)
             f.close()
