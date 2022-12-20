@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-import mysql.connector
+from MySQLdb import _mysql
 import json
 
 load_dotenv()
@@ -9,13 +9,17 @@ ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
 class Database():
     def __init__(self):
-        self.db = mysql.connector.connect(
-            host=os.getenv('MYSQL_HOST'),
-            user=os.getenv('MYSQL_USER'),
-            password=os.getenv('MYSQL_PASSWORD'),
-            database=os.getenv('MYSQL_DATABASE')
-        )
-        self.cursor = self.db.cursor()
+        try:
+            self.db = _mysql.connector.connect(
+                host=os.getenv('MYSQL_HOST'),
+                user=os.getenv('MYSQL_USER'),
+                password=os.getenv('MYSQL_PASSWORD'),
+                database=os.getenv('MYSQL_DATABASE')
+            )
+            self.cursor = self.db.cursor()
+        except (_mysql.Error, _mysql.Warning) as e:
+            print(e)
+            return None
 
     def insertData(self, data):
         sql = (
