@@ -96,7 +96,7 @@ def main():
                 # Get the confifuation file and see if pump should be on
                 try:
                     A1.config.getConfigurationDataFromDB()
-                except:
+                except (Exception,):
                     A1.config.getConfigurationDataFromFile()
 
                 A1.config.setDesiredPumpState()

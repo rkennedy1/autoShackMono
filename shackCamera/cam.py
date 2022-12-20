@@ -1,9 +1,11 @@
 import os
 import time
 import requests
+import subprocess
 from dotenv import load_dotenv
 
 load_dotenv()
+
 
 class Cam:
     def __init__(self, timezone='America/Los_Angeles'):
@@ -15,14 +17,13 @@ class Cam:
         time.tzset()
         return time.strftime('%Y-%m-%dT%H:%M:%SZ')
 
-
     def takePicture(self):
-        os.system("libcamera-still -t 5000 --viewfinder-width 2312 --viewfinder-height 1736 --width 4624 --height 3472 -o ~/autoShackMono/shackCamera/pics/{} --autofocus".format(self.fileName))
+        subprocess.call("libcamera-still -t 5000 --viewfinder-width 2312 --viewfinder-height 1736 --width 4624 --height 3472 -o ~/autoShackMono/shackCamera/pics/{} --autofocus".format(self.fileName), shell=False)
         return
 
-
     def pushPicture(self):
-        os.system("scp ~/autoShackMono/shackCamera/pics/{} ryan@guestserver.local:~/autoShackMono/shackServer/images/{}".format(self.fileName, self.fileName))
+        subprocess.call("scp ~/autoShackMono/shackCamera/pics/{} ryan@guestserver.local:~/autoShackMono/shackServer/images/{}".format(
+            self.fileName, self.fileName), shell=False)
         url = 'http://guestserver.local:3001/lastPicture'
         requests.post(url, data={'fileName': self.fileName}, timeout=5)
         return

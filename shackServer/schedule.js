@@ -8,7 +8,7 @@ router.use(express.urlencoded({ extended: true }));
 
 router.get("/", function (req, res) {
   let query = "SELECT * FROM shackSchedule";
-  db.query(query, function (err, result, fields) {
+  db.query(query, function (err, result) {
     if (err) throw console.error(err);
     res.send(result);
   });
@@ -17,7 +17,7 @@ router.get("/", function (req, res) {
 router.post("/update", function (req, res) {
   let query = `UPDATE shackSchedule SET startHour=${req.body.startHour}, duration=${req.body.duration} WHERE id=${req.body.id}`;
   console.log(query);
-  db.query(query, function (err, result, fields) {
+  db.query(query, function (err, result) {
     if (err) throw console.error(err);
     res.send(result);
   });
