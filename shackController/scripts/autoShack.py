@@ -110,7 +110,7 @@ def main():
                     'flow_rate': A1.flowSensor.flow,
                     'pump_status': A1.pump_status,
                 }
-                #A1.db.insertData(data)
+                A1.db.insertData(data)
                 A1.datalogger.info(data)
                 # wait so that we don't loop inside a second
                 time.sleep(1)
