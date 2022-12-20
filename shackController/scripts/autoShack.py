@@ -94,7 +94,11 @@ def main():
                                str(A1.flowSensor.flow))
 
                 # Get the confifuation file and see if pump should be on
-                A1.config.getConfigurationDataFromDB()
+                try:
+                    A1.config.getConfigurationDataFromDB()
+                except:
+                    A1.config.getConfigurationDataFromFile()
+
                 A1.config.setDesiredPumpState()
 
                 # Turn the pump ON or OFF depending on configuration and current flow
