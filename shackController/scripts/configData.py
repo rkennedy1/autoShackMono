@@ -27,7 +27,7 @@ class ConfigData:
         configurationData = []
         for line in data:
             configurationData.append(
-                {'id': line[0], 'start_hour': line[1], 'duration': line[2]})
+                {'id': line[0], 'start_hour': int(line[1]), 'duration': int(line[2])})
         self.scheduleData = configurationData
         # print(self.scheduleData)
 
