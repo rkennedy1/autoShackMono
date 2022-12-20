@@ -47,7 +47,7 @@ class ConfigData:
             curTime = datetime.now()
             start_time = curTime
             start_time = start_time.replace(
-                hour=item["startHour"], minute=0)
+                hour=item["start_hour"], minute=0)
             # initialize end time with start time
             duration = item["duration"]
             end_time = start_time
