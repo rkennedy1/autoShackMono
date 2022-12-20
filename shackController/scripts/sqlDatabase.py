@@ -22,12 +22,16 @@ class Database():
             return None
 
     def insertData(self, data):
-        sql = (
-            f"INSERT INTO shacklog (datetime, humidity, temperature, flow_rate, pump_status, execution_time)"
-            f" VALUES (\"{data['datetime']}\", {data['humidity']}, {data['temperature']}, {data['flow_rate']}, \"{data['pump_status']}\", 0)"
-        )
-        self.cursor.execute(sql)
-        self.db.commit()
+        try:
+            sql = (
+                f"INSERT INTO shacklog (datetime, humidity, temperature, flow_rate, pump_status, execution_time)"
+                f" VALUES (\"{data['datetime']}\", {data['humidity']}, {data['temperature']}, {data['flow_rate']}, \"{data['pump_status']}\", 0)"
+            )
+            self.cursor.execute(sql)
+            self.db.commit()
+        except (MySQLdb.Error, MySQLdb.Warning) as e:
+            print(e)
+            return None
 
 
 def main():
