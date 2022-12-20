@@ -10,7 +10,6 @@ load_dotenv()
 class ConfigData:
     def __init__(self):
         self.scheduleData = []
-        desiredPumpStateOn = False
 
     def getConfigurationDataFromDB(self):
         db = mysql.connector.connect(
@@ -25,11 +24,12 @@ class ConfigData:
         cursor.execute('SELECT * FROM shackSchedule')
         data = cursor.fetchall()
         configurationData = []
+        print(data)
         for line in data:
             configurationData.append(
                 {'id': line[0], 'start_hour': int(line[1]), 'duration': int(line[2])})
         self.scheduleData = configurationData
-        # print(self.scheduleData)
+        print(self.scheduleData)
 
     def getConfigurationDataFromFile(self):
         self.desiredPumpStateOn = False
