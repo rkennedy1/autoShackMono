@@ -30,6 +30,7 @@ class Database():
             self.cursor.execute(MySQLdb.escape_string(sql))
             self.db.commit()
         except (MySQLdb.Error, MySQLdb.Warning) as e:
+            print("Insert data error")
             print(e)
             return None
 
