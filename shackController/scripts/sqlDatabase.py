@@ -27,7 +27,7 @@ class Database():
                 f"INSERT INTO shacklog (datetime, humidity, temperature, flow_rate, pump_status, execution_time)"
                 f" VALUES (\"{data['datetime']}\", {data['humidity']}, {data['temperature']}, {data['flow_rate']}, \"{data['pump_status']}\", 0)"
             )
-            self.cursor.execute(MySQLdb.escape_string(sql))
+            self.cursor.execute(sql)
             self.db.commit()
         except (MySQLdb.Error, MySQLdb.Warning) as e:
             print("Insert data error")
