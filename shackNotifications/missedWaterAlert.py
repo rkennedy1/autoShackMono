@@ -21,11 +21,13 @@ def getWaterEvents():
         print(e)
         return 0
     compareTime = datetime.now() - timedelta(hours=12)
-    query = "SELECT COUNT(*) FROM shacklog WHERE flow_rate>0 AND datetime={}".format(compareTime)
+    query = "SELECT COUNT(datetime) FROM shacklog WHERE flow_rate>0 AND datetime>'{}';".format(
+        str(compareTime))
+    print(query)
     cursor.execute(query)
     results = cursor.fetchall()
-    print(results)
-    return results
+    print(results[0][0])
+    return results[0][0]
 
 
 def main():
