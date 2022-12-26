@@ -4,19 +4,15 @@ from flask_cors import CORS
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["http://shackpi.local",
+     "http://Ryans-MacBook-Pro.local", "http://guestserver.local"])
 cam = Cam()
-
-cors = CORS(app, resource={
-    r"*":{
-         "origins":["shackpi.local","Ryans-MacBook-Pro.local"],
-    }
-})
 
 app.config.update(
     DEBUG=os.environ.get("FLASK_DEBUG"),
     ENV=os.environ.get("FLASK_ENV")
 )
+
 
 @app.route('/takePicture')
 def takePicture():
