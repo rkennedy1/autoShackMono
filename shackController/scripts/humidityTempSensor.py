@@ -1,6 +1,3 @@
-# import board
-import DHT
-import time
 from pigpio_dht import DHT22
 
 

@@ -39,7 +39,7 @@ class AutoShack:
         self.logger.info("Begin AutoShack")
 
         self.desiredPumpStateOn = False
-        self.tempHumiditySensor = HumidityTempSensor(7, self.logger)
+        self.tempHumiditySensor = HumidityTempSensor(27, self.logger)
         self.flowSensor = FlowSensor(23, self.logger)
         self.pump = Pump(18, self.logger)
         self.pump_status = "unchanged"
