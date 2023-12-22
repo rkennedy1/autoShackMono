@@ -2,7 +2,6 @@
 from logging.handlers import TimedRotatingFileHandler
 from operator import truediv
 from humidityTempSensor import HumidityTempSensor
-import board
 from pump import Pump
 from flow import FlowSensor
 from sqlDatabase import Database

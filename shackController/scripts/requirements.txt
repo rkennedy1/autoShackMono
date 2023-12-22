@@ -1,4 +1,4 @@
-pigpio
+pigpio-dht
 RPi.GPIO
 python-dotenv
 pymysql
