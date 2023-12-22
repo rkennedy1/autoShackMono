@@ -1,13 +1,12 @@
 # import board
 import DHT
 import time
-import pigpio
+from pigpio_dht import DHT22
 
 
 class HumidityTempSensor:
     def __init__(self, pin, logger):
-        self.pin = pin
-        self.sensor = DHT.sensor(pigpio.pi(), pin, model=2)
+        self.sensor = DHT22(pin)
         self.humidity, self.temperature = 0, 0
         self.logger = logger
 
@@ -15,21 +14,10 @@ class HumidityTempSensor:
         # signal.alarm(15) #Set the parameter to the amount of seconds you want to wait
 
     def getReading(self):
-        tries = 5
-        while tries:
-            try:
-                timestamp, gpio, status, temperature, humidity = self.sensor.read()
-                # get temp/humidy readings and
-                if status == DHT.DHT_TIMEOUT:  # no response from sensor
-                    print("NO RESPONSE FROM SENSOR")
-                    raise RuntimeError
-                if status == DHT.DHT_GOOD:
-                    print(timestamp + gpio)
-                    self.temperature = temperature
-                    self.humidity = humidity
-                    print("temp: " + temperature)
-                    print("humidity: " + humidity)
-                time.sleep(2)
-                tries -= 1
-            except KeyboardInterrupt:
-                break
+        result = self.sensor.sample(samples=5)
+        if result["valid"]:
+            self.temperature = result["temp_f"]
+            self.humidity = result["humidity"]
+            print(result)
+        else:
+            print("error reading DHT22 sensor")
