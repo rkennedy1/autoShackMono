@@ -18,24 +18,20 @@ class AutoShack:
     def __init__(self):
         #  set up some basic logging... look in the shack.log file for details
         #  of an execution of the program.
-        self.ROOT_DIR = os.path.realpath(
-            os.path.join(os.path.dirname(__file__), '..'))
-        self.logger = logging.getLogger(
-            "Autoshack rotating human readable log")
+        self.ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), ".."))
+        self.logger = logging.getLogger("Autoshack rotating human readable log")
         self.logger.setLevel(logging.INFO)
         self.datalogger = logging.getLogger("Autoshack data log")
         self.datalogger.setLevel(logging.INFO)
         # rotate the logs once a day, and keep 5 versions
-        handler = TimedRotatingFileHandler(self.ROOT_DIR+'/logs/shack.log',
-                                           when='D',
-                                           interval=1,
-                                           backupCount=5)
+        handler = TimedRotatingFileHandler(
+            self.ROOT_DIR + "/logs/shack.log", when="D", interval=1, backupCount=5
+        )
         # rotate the logs once a day, and keep 5 versions
-        datahandler = TimedRotatingFileHandler(self.ROOT_DIR+'/logs/shackdata.log',
-                                               when='D',
-                                               interval=1,
-                                               backupCount=5)
-        formatter = logging.Formatter('%(asctime)s - %(message)s')
+        datahandler = TimedRotatingFileHandler(
+            self.ROOT_DIR + "/logs/shackdata.log", when="D", interval=1, backupCount=5
+        )
+        formatter = logging.Formatter("%(asctime)s - %(message)s")
         dataformatter = jsonlogger.JsonFormatter()
         handler.setFormatter(formatter)
         datahandler.setFormatter(dataformatter)
@@ -44,10 +40,10 @@ class AutoShack:
         self.logger.info("Begin AutoShack")
 
         self.desiredPumpStateOn = False
-        self.tempHumiditySensor = HumidityTempSensor(board.D4, self.logger)
+        self.tempHumiditySensor = HumidityTempSensor(4, self.logger)
         self.flowSensor = FlowSensor(23, self.logger)
         self.pump = Pump(18, self.logger)
-        self.pump_status = 'unchanged'
+        self.pump_status = "unchanged"
         self.db = Database()
         self.config = ConfigData()
 
@@ -79,19 +75,20 @@ def main():
     A1 = AutoShack()
     data = []
     try:
-        while (True):
+        while True:
             # Every Minute
-            if (datetime.now().second == 0):
+            if datetime.now().second == 0:
                 # average over 1 minute
                 A1.getReadings()
 
                 # Get the temp, humidity and flow rate
-                A1.logger.info('Humidity (%)           :' +
-                               str(A1.tempHumiditySensor.humidity))
-                A1.logger.info('Temperature (F)        :' +
-                               str(A1.tempHumiditySensor.temperature))
-                A1.logger.info('Flow Rate  (Liter/min) :' +
-                               str(A1.flowSensor.flow))
+                A1.logger.info(
+                    "Humidity (%)           :" + str(A1.tempHumiditySensor.humidity)
+                )
+                A1.logger.info(
+                    "Temperature (F)        :" + str(A1.tempHumiditySensor.temperature)
+                )
+                A1.logger.info("Flow Rate  (Liter/min) :" + str(A1.flowSensor.flow))
 
                 # Get the confifuation file and see if pump should be on
                 try:
@@ -104,11 +101,11 @@ def main():
                 # Turn the pump ON or OFF depending on configuration and current flow
                 A1.setPumpState(A1.config.desiredPumpStateOn)
                 data = {
-                    'datetime': datetime.now(),
-                    'humidity': A1.tempHumiditySensor.humidity,
-                    'temperature': A1.tempHumiditySensor.temperature,
-                    'flow_rate': A1.flowSensor.flow,
-                    'pump_status': A1.pump_status,
+                    "datetime": datetime.now(),
+                    "humidity": A1.tempHumiditySensor.humidity,
+                    "temperature": A1.tempHumiditySensor.temperature,
+                    "flow_rate": A1.flowSensor.flow,
+                    "pump_status": A1.pump_status,
                 }
                 A1.db.insertData(data)
                 A1.datalogger.info(data)
@@ -123,6 +120,7 @@ def main():
 
 if __name__ == "__main__":
     import time
+
     s = time.perf_counter()
     A1 = main()
     elapsed = time.perf_counter() - s

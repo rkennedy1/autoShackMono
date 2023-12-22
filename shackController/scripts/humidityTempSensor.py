@@ -25,6 +25,8 @@ class HumidityTempSensor:
                     raise RuntimeError
                 if status == DHT.DHT_GOOD:
                     print(timestamp + gpio)
+                    self.temperature = temperature
+                    self.humidity = humidity
                     print("temp: " + temperature)
                     print("humidity: " + humidity)
                 time.sleep(2)
