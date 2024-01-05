@@ -11,7 +11,12 @@ class HumidityTempSensor:
         # signal.alarm(15) #Set the parameter to the amount of seconds you want to wait
 
     def getReading(self):
-        result = self.sensor.sample(samples=5)
+        try:
+            self.humidity, self.temperature = 0, 0
+            result = self.sensor.sample(samples=5)
+        except TimeoutError:
+            self.logger.info("Temp/Humidity sensor timed out")
+
         if result["valid"]:
             self.temperature = result["temp_f"]
             self.humidity = result["humidity"]

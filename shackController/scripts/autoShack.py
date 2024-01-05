@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from logging.handlers import TimedRotatingFileHandler
-from operator import truediv
 from humidityTempSensor import HumidityTempSensor
 from pump import Pump
 from flow import FlowSensor
@@ -44,6 +43,11 @@ class AutoShack:
         self.pump = Pump(18, self.logger)
         self.pump_status = "unchanged"
         self.db = Database()
+        if self.db.connected():
+            self.logger.info("Database connected")
+        else:
+            self.logger.info("No Database connected, using config file")
+
         self.config = ConfigData()
 
     def setPumpState(self, pumpState):
@@ -82,23 +86,28 @@ def main():
 
                 # Get the temp, humidity and flow rate
                 A1.logger.info(
-                    "Humidity (%)           :" + str(A1.tempHumiditySensor.humidity)
+                    "Humidity (%)           :"
+                    + str(A1.tempHumiditySensor.humidity)
                 )
                 A1.logger.info(
-                    "Temperature (F)        :" + str(A1.tempHumiditySensor.temperature)
+                    "Temperature (F)        :"
+                    + str(A1.tempHumiditySensor.temperature)
                 )
-                A1.logger.info("Flow Rate  (Liter/min) :" + str(A1.flowSensor.flow))
+                A1.logger.info("Flow Rate  (Liter/min) :"
+                               + str(A1.flowSensor.flow))
 
                 # Get the confifuation file and see if pump should be on
-                try:
+                if A1.db.connected:
                     A1.config.getConfigurationDataFromDB()
-                except (Exception,):
+                else:
                     A1.config.getConfigurationDataFromFile()
 
                 A1.config.setDesiredPumpState()
 
-                # Turn the pump ON or OFF depending on configuration and current flow
+                # Turn the pump ON or OFF depending on config and flow
                 A1.setPumpState(A1.config.desiredPumpStateOn)
+
+                # Record the data to log(s)
                 data = {
                     "datetime": datetime.now(),
                     "humidity": A1.tempHumiditySensor.humidity,
@@ -106,7 +115,11 @@ def main():
                     "flow_rate": A1.flowSensor.flow,
                     "pump_status": A1.pump_status,
                 }
-                A1.db.insertData(data)
+
+                # Log to the database if we have a good connection
+                if A1.db.connected:
+                    A1.db.insertData(data)
+
                 A1.datalogger.info(data)
                 # wait so that we don't loop inside a second
                 time.sleep(1)
@@ -118,7 +131,6 @@ def main():
 
 
 if __name__ == "__main__":
-    import time
 
     s = time.perf_counter()
     A1 = main()
