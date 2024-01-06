@@ -8,7 +8,9 @@ ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
 
 class Database():
+
     def __init__(self):
+        
         try:
             self.db = MySQLdb.connect(
                 host=os.getenv('MYSQL_HOST'),
@@ -17,7 +19,9 @@ class Database():
                 database=os.getenv('MYSQL_DATABASE')
             )
             self.cursor = self.db.cursor()
+            self.connected = True
         except (MySQLdb.Error, MySQLdb.Warning) as e:
+            self.connected = False
             print(e)
             return None
 

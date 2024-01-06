@@ -18,12 +18,14 @@ class Cam:
         return time.strftime('%Y-%m-%dT%H:%M:%SZ')
 
     def takePicture(self):
-        subprocess.call("libcamera-still -t 5000 --viewfinder-width 2312 --viewfinder-height 1736 --width 4624 --height 3472 -o ~/autoShackMono/shackCamera/pics/{} --autofocus".format(self.fileName), shell=False)
+        # os.system("libcamera-still -t 5000 --viewfinder-width 2312 --viewfinder-height 1736 --width 4624 --height 3472 -o ~/autoShackMono/shackCamera/pics/{} --autofocus".format(self.fileName))
+        os.system(
+            "fswebcam ~/autoShackMono/shackCamera/pics/{} -r 3264x2448 -i 0".format(self.fileName))
         return
 
     def pushPicture(self):
-        subprocess.call("scp ~/autoShackMono/shackCamera/pics/{} ryan@guestserver.local:~/autoShackMono/shackServer/images/{}".format(
-            self.fileName, self.fileName), shell=False)
+        os.system("scp ~/autoShackMono/shackCamera/pics/{} ryan@guestserver.local:~/autoShackMono/shackServer/images/{}".format(
+            self.fileName, self.fileName))
         url = 'http://guestserver.local:3001/lastPicture'
         requests.post(url, data={'fileName': self.fileName}, timeout=5)
         return
