@@ -1,0 +1,6 @@
+pigpio-dht
+RPi.GPIO
+python-dotenv
+pymysql
+python-json-logger
+mysql-connector
