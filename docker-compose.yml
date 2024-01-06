@@ -1,0 +1,32 @@
+version: '3.6'
+
+services:
+  server:
+    image: shack_server
+    env_file:
+      - ./shackWeb/.env
+    expose:
+      - '1783'
+    ports:
+      - '1783:1783'
+    command: yarn start
+    networks:
+      - bowlpool
+
+  web:
+    depends_on:
+      - server
+    image: shack_web
+    env_file:
+      - ./shackWeb/.env
+    expose:
+      - '80'
+    ports:
+      - '80:80'
+    networks:
+      - bowlpool
+
+networks:
+  bowlpool:
+    name: bowlpool
+    external: true
