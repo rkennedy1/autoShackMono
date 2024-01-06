@@ -5,10 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 let router = express_1.default.Router();
-const bodyParser = require("body-parser");
 var db = require("./db");
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({ extended: true }));
 function buildLastNDaysQuery(n) {
     var date = new Date();
     date.setDate(date.getDate() - n);

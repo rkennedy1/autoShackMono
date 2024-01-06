@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 # Import echo_*() and validate_suv_host() functions
 source "$SCRIPT_DIR/bash-utils.sh"

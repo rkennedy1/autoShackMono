@@ -19,7 +19,7 @@ blue=$'\e[0;34m' # Blue output means executing inside SUV
 no_color="\033[0m"
 
 function echo_header() {
-  echo -e "\n${cyan}*** ${*} ***${no_color}"
+  echo -e "\n${cyan}*** ${*} ***${no_color}\n"
 }
 
 function echo_subheader() {

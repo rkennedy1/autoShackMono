@@ -1,13 +1,10 @@
 require("dotenv").config();
 import express, { Request, Response } from "express";
 const cors = require("cors");
-const bodyParse = require("body-parser");
 
 const app = express();
 
 app.use(cors());
-app.use(bodyParse.urlencoded({ extended: false }));
-app.use(bodyParse.json());
 
 let lastPicture = "";
 

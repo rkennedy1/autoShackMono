@@ -1,11 +1,6 @@
-export {};
 import express, { Request, Response } from "express";
 let router = express.Router();
-const bodyParser = require("body-parser");
 var db = require("./db");
-
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({ extended: true }));
 
 interface shackLog {
   poo: number;
