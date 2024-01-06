@@ -1,16 +1,9 @@
-#import board
-import adafruit_dht
-import time
+from pigpio_dht import DHT22
 
 
-def handler(signum, frame):
-    raise Exception('Action took too much time')
-
-
-class HumidityTempSensor():
+class HumidityTempSensor:
     def __init__(self, pin, logger):
-        self.pin = pin
-        self.sensor = adafruit_dht.DHT22(self.pin)
+        self.sensor = DHT22(pin)
         self.humidity, self.temperature = 0, 0
         self.logger = logger
 
@@ -19,16 +12,14 @@ class HumidityTempSensor():
 
     def getReading(self):
         try:
-            # get temp/humidy readings and
-            temperature_c = self.sensor.temperature
-            self.temperature = temperature_c * (9 / 5) + 32
-            self.humidity = self.sensor.humidity
+            self.humidity, self.temperature = 0, 0
+            result = self.sensor.sample(samples=5)
+        except TimeoutError:
+            self.logger.info("Temp/Humidity sensor timed out")
 
-        except RuntimeError as error:
-            # Errors happen fairly often, DHT's are hard to read, just keep going
-            self.logger.error(error.args[0])
-            time.sleep(2.0)
-            return
-        except Exception as error:
-            self.sensor.exit()
-            raise error
+        if result["valid"]:
+            self.temperature = result["temp_f"]
+            self.humidity = result["humidity"]
+            print(result)
+        else:
+            print("error reading DHT22 sensor")
