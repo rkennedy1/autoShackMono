@@ -1,13 +1,13 @@
 require("dotenv").config();
-const express = require("express");
+import express, { Request, Response } from "express";
 const cors = require("cors");
-const bodyParser = require("body-parser");
+const bodyParse = require("body-parser");
 
 const app = express();
 
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(bodyParse.urlencoded({ extended: false }));
+app.use(bodyParse.json());
 
 let lastPicture = "";
 
@@ -18,16 +18,16 @@ app.listen(process.env.PORT, () =>
 app.use(express.static("public"));
 app.use("/images", express.static("images"));
 
-app.post("/lastPicture", function (req, res) {
+app.post("/lastPicture", function (req: Request, res: Response) {
   lastPicture = req.body.fileName;
   res.send("a ok");
 });
-app.get("/lastPicture", function (req, res) {
+app.get("/lastPicture", function (req: Request, res: Response) {
   res.json({ lastPic: lastPicture });
 });
 
-var dataRouter = require("./data.js");
+var dataRouter = require("./src/data.js");
 app.use("/data", dataRouter);
 
-var scheduleRouter = require("./schedule.js");
+var scheduleRouter = require("./src/schedule.js");
 app.use("/schedule", scheduleRouter);

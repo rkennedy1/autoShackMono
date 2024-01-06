@@ -14,7 +14,7 @@ FROM base as production
 
 ENV NODE_PATH=./build
 
-EXPOSE 1313
+EXPOSE 1783
 
 RUN yarn build
 
