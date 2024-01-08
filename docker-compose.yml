@@ -2,31 +2,30 @@ version: '3.6'
 
 services:
   server:
-    image: shack_server
+    image: registry.digitalocean.com/autoshack/shack:server
     env_file:
-      - ./shackWeb/.env
+      - ./shackServer/.env
     expose:
       - '1783'
     ports:
       - '1783:1783'
     command: yarn start
     networks:
-      - bowlpool
+      - shack
 
   web:
     depends_on:
       - server
-    image: shack_web
-    env_file:
-      - ./shackWeb/.env
+    image: registry.digitalocean.com/autoshack/shack:web
+    environment: 
+      - Port=4200
     expose:
       - '80'
     ports:
       - '80:80'
     networks:
-      - bowlpool
+      - shack
 
 networks:
-  bowlpool:
-    name: bowlpool
-    external: true
+  shack:
+    name: shack
