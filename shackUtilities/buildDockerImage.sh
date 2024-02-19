@@ -9,7 +9,7 @@ function buildDockerImage() {
   docker image rm "$1" &>/dev/null || true
 
   echo_info "Building new docker image"
-  docker build -t "$1" . --no-cache
+  docker buildx build --platform linux/amd64 -t "$1" . --no-cache --load
 }
 
 echo_header "Building Shack Server Image"
@@ -17,5 +17,5 @@ cd ../shackServer/
 buildDockerImage shack_server
 
 echo_header "Building Shack Web Image"
-cd ../shackWeb/
+cd ../shackweb2/
 buildDockerImage shack_web

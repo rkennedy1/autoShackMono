@@ -75,4 +75,12 @@ router.get("/lastFlow", function (req: Request, res: Response) {
   });
 });
 
+router.get("/lastTenFlows", function (req: Request, res: Response) {
+  let query = `SELECT * FROM shacklog WHERE flow_rate>=1 ORDER BY id DESC LIMIT 10;`;
+  db.query(query, function (err: Error, result: shackLog[]) {
+    if (err) throw console.error(err);
+    res.send(result);
+  });
+});
+
 module.exports = router;
