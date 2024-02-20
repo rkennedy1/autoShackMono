@@ -9,7 +9,7 @@ var db = require("./db");
 router.use(express_1.default.json());
 router.use(express_1.default.urlencoded({ extended: true }));
 router.get("/", function (req, res) {
-    let query = "SELECT * FROM shackSchedule";
+    let query = "SELECT start_hour, duration FROM shackSchedule ORDER BY start_hour";
     db.query(query, function (err, result) {
         if (err)
             throw console.error(err);

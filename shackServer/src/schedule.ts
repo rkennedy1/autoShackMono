@@ -11,7 +11,8 @@ interface shackSchedule {
 }
 
 router.get("/", function (req: Request, res: Response) {
-  let query = "SELECT * FROM shackSchedule";
+  let query =
+    "SELECT start_hour, duration FROM shackSchedule ORDER BY start_hour";
   db.query(query, function (err: Error, result: shackSchedule) {
     if (err) throw console.error(err);
     res.send(result);

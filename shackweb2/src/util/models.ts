@@ -1,6 +1,11 @@
-export interface item {
+export interface shacklogItem {
   datetime: Date;
-  flowRate: number;
+  flow_rate: number;
   temperature: number;
   humidity: number;
+}
+
+export interface scheduleItem {
+  start_hour: number;
+  duration: number;
 }
