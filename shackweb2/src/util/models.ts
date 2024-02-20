@@ -9,3 +9,17 @@ export interface scheduleItem {
   start_hour: number;
   duration: number;
 }
+
+export interface graphProps {
+  data: shacklogItem[];
+}
+
+export type shacklogGraphItem = {
+  date: Date;
+  data: number;
+};
+
+export type Series = {
+  label: string;
+  data: shacklogGraphItem[];
+};
