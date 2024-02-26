@@ -135,7 +135,9 @@ __pycache__/
 shack.config.json*
 
 /shackServer/images/
-/shackCamera/pics/
+/shackServer/build/
+/shackServer/build/src/
+/shackCamera/pics
 /shackCamera/bug-report.txt
 
 /
