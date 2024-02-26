@@ -32,7 +32,7 @@ router.get("/", function (req: Request, res: Response) {
 
 router.post("/update", function (req: Request, res: Response) {
   const query = `UPDATE shackSchedule SET start_hour=${req.body.start_hour}, duration=${req.body.duration} WHERE id=${req.body.id}`;
-  db.query(query, function (err: Error, result: sqlUpdateResponse) {
+  db.query(query, function (err: Error) {
     if (err) throw console.error(err);
     const query = `SELECT start_hour, duration, id FROM shackSchedule WHERE id = ${req.body.id}`;
     db.query(query, function (err: Error, result: shackSchedule) {
