@@ -23,8 +23,8 @@ app.get("/lastPicture", function (req: Request, res: Response) {
   res.json({ lastPic: lastPicture });
 });
 
-var dataRouter = require("./src/data.js");
+const dataRouter = require("./src/data.js");
 app.use("/data", dataRouter);
 
-var scheduleRouter = require("./src/schedule.js");
+const scheduleRouter = require("./src/schedule.js");
 app.use("/schedule", scheduleRouter);
