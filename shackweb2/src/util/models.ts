@@ -6,6 +6,7 @@ export interface shacklogItem {
 }
 
 export interface scheduleItem {
+  id: number;
   start_hour: number;
   duration: number;
 }
