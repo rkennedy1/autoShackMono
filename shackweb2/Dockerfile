@@ -1,7 +1,7 @@
 # Dockerfile
 
 #Stage 1
-FROM node:19-alpine as build
+FROM node:latest as build
 
 WORKDIR /app
 
