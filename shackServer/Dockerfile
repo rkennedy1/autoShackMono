@@ -1,21 +1,28 @@
 # Dockerfile
 
-FROM node:latest as base
+# Stage 1: Build
+FROM node:latest as build
 
 WORKDIR /home/node/app
 
 COPY package*.json ./
-
-RUN yarn
+RUN yarn install --frozen-lockfile --production
 
 COPY . .
+RUN yarn build
 
-FROM base as production
+# Stage 2: Production
+FROM node:alpine
 
-ENV NODE_PATH=./build
+WORKDIR /home/node/app
+
+COPY --from=build /home/node/app/package*.json ./
+COPY --from=build /home/node/app/build ./build
+
+ENV NODE_ENV=production
+RUN yarn install --frozen-lockfile && \
+    yarn cache clean
 
 EXPOSE 1783
 
-RUN yarn build
-
-COPY . .
+CMD ["node", "./build/index.js"]
