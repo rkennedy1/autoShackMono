@@ -7,7 +7,7 @@ on:
 
 jobs:
   cypress-tests:
-    runs-on: [self-hosted, linux, ARM64] # Only runs on self
+    runs-on: [self-hosted, linux] # Only runs on self
 
     steps:
       - name: Checkout code
