@@ -3,6 +3,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+# Import echo_*() and validate_suv_host() functions
 source "$SCRIPT_DIR/bash-utils.sh"
 
 function buildDockerImage() {
@@ -17,10 +18,18 @@ function buildDockerImage() {
 main() {
   echo_header "Building Shack Server Image"
   cd "$SCRIPT_DIR/../shackServer/" || { echo_error "Failed to change directory"; exit 1; }
+  if [ ! -d "./" ]; then
+    echo_error "Directory not found."
+    exit 1
+  fi
   buildDockerImage "shack_server"
 
   echo_header "Building Shack Web Image"
   cd "$SCRIPT_DIR/../shackweb2/" || { echo_error "Failed to change directory"; exit 1; }
+  if [ ! -d "./" ]; then
+    echo_error "Directory not found."
+    exit 1
+  fi
   buildDockerImage "shack_web"
 }
 

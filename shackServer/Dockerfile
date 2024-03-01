@@ -1,7 +1,7 @@
 # Dockerfile
 
 # Stage 1: Build
-FROM node:latest as build
+FROM node:20 as build
 
 WORKDIR /home/node/app
 

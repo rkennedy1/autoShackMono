@@ -10,63 +10,61 @@ const axiosInstance = axios.create({
   baseURL: baseURL,
 });
 
-export class API {
-  static async fetchResource<T>(url: string): Promise<T | null> {
-    try {
-      const response = await axiosInstance.get<T>(url);
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      return null;
-    }
+export async function fetchResource<T>(url: string): Promise<T | null> {
+  try {
+    const response = await axiosInstance.get<T>(url);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return null;
   }
+}
 
-  static async getLastItem(): Promise<shacklogItem | null> {
-    const data = await this.fetchResource<shacklogItem[]>("/data/lastItem");
-    return data ? data[0] : null;
+export async function getLastItem(): Promise<shacklogItem | null> {
+  const data = await fetchResource<shacklogItem[]>("/data/lastItem");
+  return data ? data[0] : null;
+}
+
+export async function getLastThreeDays(): Promise<shacklogItem[] | null> {
+  return fetchResource<shacklogItem[]>("/data/lastThreeDays");
+}
+
+export async function getLastTenFlows(): Promise<shacklogItem[] | null> {
+  return fetchResource<shacklogItem[]>("/data/lastTenFlows");
+}
+
+export async function getSchedule(): Promise<scheduleItem[] | null> {
+  return fetchResource<scheduleItem[]>("/schedule");
+}
+
+export async function updateScheduleItem(
+  item: scheduleItem
+): Promise<scheduleItem | null> {
+  try {
+    const response = await axiosInstance.post("/schedule/update", item);
+    return response.data[0];
+  } catch (error) {
+    console.error("Error updating schedule item:", error);
+    return null;
   }
+}
 
-  static async getLastThreeDays(): Promise<shacklogItem[] | null> {
-    return this.fetchResource<shacklogItem[]>("/data/lastThreeDays");
+export async function addScheduleItem(
+  item: scheduleItem
+): Promise<scheduleItem | null> {
+  try {
+    const response = await axiosInstance.post("/schedule/add", item);
+    return response.data[0];
+  } catch (error) {
+    console.error("Error add schedule item:", error);
+    return null;
   }
+}
 
-  static async getLastTenFlows(): Promise<shacklogItem[] | null> {
-    return this.fetchResource<shacklogItem[]>("/data/lastTenFlows");
-  }
-
-  static async getSchedule(): Promise<scheduleItem[] | null> {
-    return this.fetchResource<scheduleItem[]>("/schedule");
-  }
-
-  static async updateScheduleItem(
-    item: scheduleItem
-  ): Promise<scheduleItem | null> {
-    try {
-      const response = await axiosInstance.post("/schedule/update", item);
-      return response.data[0];
-    } catch (error) {
-      console.error("Error updating schedule item:", error);
-      return null;
-    }
-  }
-
-  static async addScheduleItem(
-    item: scheduleItem
-  ): Promise<scheduleItem | null> {
-    try {
-      const response = await axiosInstance.post("/schedule/add", item);
-      return response.data[0];
-    } catch (error) {
-      console.error("Error add schedule item:", error);
-      return null;
-    }
-  }
-
-  static async deleteScheduleItem(id: number) {
-    try {
-      await axiosInstance.post("/schedule/delete", { id: id });
-    } catch (error) {
-      console.error("Error add schedule item:", error);
-    }
+export async function deleteScheduleItem(id: number) {
+  try {
+    await axiosInstance.post("/schedule/delete", { id: id });
+  } catch (error) {
+    console.error("Error add schedule item:", error);
   }
 }

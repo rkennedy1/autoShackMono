@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { API } from "../api/api";
 import { shacklogItem } from "../util/models";
 import ShackGraph from "../components/ShackGraph";
+import { getLastThreeDays } from "../api/api";
 
 const NO_DATA_MESSAGE = "No data available";
 const ERROR_FETCHING_DATA_MESSAGE = "Error fetching data:";
@@ -12,15 +12,15 @@ const LastThreeDays = () => {
 
   useEffect(() => {
     setLoading(true);
-    API.getLastThreeDays()
-      .then((resp) => {
+    getLastThreeDays()
+      .then((resp: shacklogItem[] | null) => {
         if (resp && resp.length > 0) {
           setShackData(resp);
         } else {
           console.log(NO_DATA_MESSAGE);
         }
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         console.error(ERROR_FETCHING_DATA_MESSAGE, error);
       })
       .finally(() => setLoading(false));
