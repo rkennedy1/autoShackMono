@@ -1,0 +1,22 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: [self-hosted, linux]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: ./shackUtilities/buildDockerImage.sh
+
+    # Log in to DigitalOcean registry
+    - name: Log in to DigitalOcean registry
+      run: echo "${{ secrets.DIGITALOCEAN_REGISTRY_TOKEN }}" | docker login registry.digitalocean.com/autoshack --username ${{ secrets.DIGITALOCEAN_REGISTRY_USERNAME }} --password-stdin
+
+    # Push the Docker image to DigitalOcean registry
+    - name: Push Docker image to DigitalOcean registry
+      run: ./shackUtilities/pushDockerImages.sh
