@@ -6,7 +6,7 @@ FROM node:20 as build
 WORKDIR /home/node/app
 
 COPY package*.json ./
-RUN yarn install --frozen-lockfile --production
+RUN yarn install --frozen-lockfile
 
 COPY . .
 RUN yarn build
