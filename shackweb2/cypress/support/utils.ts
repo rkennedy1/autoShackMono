@@ -41,3 +41,9 @@ export const waitForPageLoad = () => {
     isPageLoaded = true;
   }
 };
+
+const baseURL: string = "localhost";
+const apiPort: string = "1783";
+const webPort: string = "3000";
+export const apiURL: string = `http://${baseURL}:${apiPort}`;
+export const webURL: string = `http://${baseURL}:${webPort}`;
