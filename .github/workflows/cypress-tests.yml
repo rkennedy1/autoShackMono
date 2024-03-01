@@ -22,10 +22,8 @@ jobs:
         run: |
           cd shackServer
           yarn install
-          ls
-          cd ..
-          ls
-          cd shackweb2
+          yarn build
+          cd ../shackweb2
           yarn install
 
       - name: Start Node.js server
