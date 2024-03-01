@@ -29,6 +29,7 @@ jobs:
       - name: Start Node.js server
         run: |
           cd shackServer
+          PORT=1783
           yarn start &
           sleep 10  # Give some time for the server to start
 
