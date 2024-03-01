@@ -21,15 +21,16 @@ jobs:
         cd shackweb2
         docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/shack_web
 
-    - name: Build the Web Docker image
+    - name: Build the Server Docker image
       run: |
+        yarn add global typescript
         cd shackServer
         docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/shack_server
     
     - name: Log in to DigitalOcean registry
       run: echo "${{ secrets.DIGITALOCEAN_REGISTRY_TOKEN }}" | docker login registry.digitalocean.com/autoshack --username ${{ secrets.DIGITALOCEAN_REGISTRY_USERNAME }} --password-stdin
 
-    - name: Push Docker images to DigitalOcean registry
+    - name: Push the Docker images to DigitalOcean registry
       run: |
         docker push registry.digitalocean.com/autoshack/shack_server
         docker push registry.digitalocean.com/autoshack/shack_web
