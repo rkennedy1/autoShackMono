@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd ../shackweb2
+          cd shackweb2
           yarn install
 
       - name: Start React application
