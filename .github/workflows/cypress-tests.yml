@@ -20,26 +20,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd shackServer
-          yarn install
-          yarn build
           cd ../shackweb2
           yarn install
-      - name: "Create Server env file"
-        run: |
-          cd shackServer
-          touch .env
-          echo MYSQL_HOST="100.82.180.166" >> .env
-          echo MYSQL_USER=${{ secrets.SQL_USER }} >> .env
-          echo MYSQL_PASSWORD=${{ secrets.SQL_PASSWORD }} >> .env
-          echo MYSQL_DATABASE=autoshackTesting >> .env
-          echo PORT=1783 >> .env
-          cat .env
-      - name: Start Node.js server
-        run: |
-          cd shackServer
-          yarn start &
-          sleep 10  # Give some time for the server to start
+
       - name: Start React application
         run: |
           cd shackweb2
