@@ -1,30 +1,32 @@
-require("dotenv").config();
 import express, { Request, Response } from "express";
-const cors = require("cors");
+import cors from "cors";
+import dotenv from "dotenv";
+import dataRouter from "./src/data.js";
+import scheduleRouter from "./src/schedule.js";
+
+dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
+app.use(express.json());
 
 let lastPicture = "";
 
-app.listen(process.env.PORT, () =>
-  console.log("API is running on port ", process.env.PORT)
-);
+app.listen(PORT, () => console.log(`API is running on port ${PORT}`));
 
 app.use(express.static("public"));
 app.use("/images", express.static("images"));
 
-app.post("/lastPicture", function (req: Request, res: Response) {
+app.post("/lastPicture", (req: Request, res: Response) => {
   lastPicture = req.body.fileName;
-  res.send("a ok");
+  res.send("OK");
 });
-app.get("/lastPicture", function (req: Request, res: Response) {
+
+app.get("/lastPicture", (req: Request, res: Response) => {
   res.json({ lastPic: lastPicture });
 });
 
-var dataRouter = require("./src/data.js");
 app.use("/data", dataRouter);
-
-var scheduleRouter = require("./src/schedule.js");
 app.use("/schedule", scheduleRouter);

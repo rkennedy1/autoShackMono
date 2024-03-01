@@ -1,7 +1,9 @@
-var mysql = require("mysql");
-require("dotenv").config();
+const mysql = require("mysql");
+import dotenv from "dotenv";
 
-var connection = mysql.createPool({
+dotenv.config();
+
+const connection = mysql.createPool({
   host: process.env.MYSQL_HOST,
   user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PASSWORD,
