@@ -3,20 +3,33 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
+
   build:
-    runs-on: [self-hosted, linux]
+
+    runs-on: ubuntu-latest
 
     steps:
+    
     - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: ./shackUtilities/buildDockerImage.sh
+    
+    - name: Build the Web Docker image
+      run: |
+        cd shackweb2
+        docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/shack_web
 
-    # Log in to DigitalOcean registry
+    - name: Build the Web Docker image
+      run: |
+        cd shackServer
+        docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/shack_server
+    
     - name: Log in to DigitalOcean registry
       run: echo "${{ secrets.DIGITALOCEAN_REGISTRY_TOKEN }}" | docker login registry.digitalocean.com/autoshack --username ${{ secrets.DIGITALOCEAN_REGISTRY_USERNAME }} --password-stdin
 
-    # Push the Docker image to DigitalOcean registry
-    - name: Push Docker image to DigitalOcean registry
-      run: ./shackUtilities/pushDockerImages.sh
+    - name: Push Docker images to DigitalOcean registry
+      run: |
+        docker push registry.digitalocean.com/autoshack/shack_server
+        docker push registry.digitalocean.com/autoshack/shack_web
