@@ -23,7 +23,7 @@ jobs:
 
     - name: Build the Server Docker image
       run: |
-        yarn add global typescript
+        tsc -v
         cd shackServer
         docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/shack_server
     
