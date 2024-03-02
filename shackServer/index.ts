@@ -3,12 +3,19 @@ import cors from "cors";
 import dotenv from "dotenv";
 import dataRouter from "./src/data.js";
 import scheduleRouter from "./src/schedule.js";
+import RateLimit from "express-rate-limit";
+
+const limiter = RateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // max 100 requests per windowMs
+});
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 1783;
 
+app.use(limiter);
 app.use(cors());
 app.use(express.json());
 
