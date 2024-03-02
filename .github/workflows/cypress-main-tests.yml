@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - main # This will trigger the workflow for any push to the main branch
+  workflow_dispatch:
 
 jobs:
   cypress-tests:
