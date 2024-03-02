@@ -1,4 +1,4 @@
-name: Run Cypress Tests and Trigger Docker Image CI if successful
+name: Run Cypress Tests and Trigger Docker Image CI on push to main
 
 on:
   pull_request:
@@ -48,25 +48,11 @@ jobs:
           yarn cypress run --record --key b19bca40-c361-4bf7-9f25-1efd583c503b --env branch_name=${{ github.event.pull_request.head.ref }}
           echo "::set-output name=test-result::$?"
 
-      - name: Trigger Docker Image CI
-        if: always()
-        uses: actions/github-script@v5
+      - name: Trigger Build and Push Docker Images to Registry
+        if: always() && steps.run-cypress.outputs.test-result == '0'
+        uses: actions/workflow-dispatch@v2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const status = '${{ steps.run-cypress.outputs.test-result }}';
-            if (status === '0') {
-              const triggerWorkflow = async () => {
-                const response = await octokit.request('POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches', {
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  workflow_id: 'YOUR_WORKFLOW_ID', // Replace with the workflow ID of Docker Image CI
-                  ref: 'main', // Replace with the branch name
-                  inputs: {
-                    trigger_reason: 'Cypress tests passed'
-                  }
-                });
-                console.log(response.status);
-              };
-              await triggerWorkflow();
-            }
+          workflow: "build-push-docker-image.yml"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          inputs: |
+            trigger_reason: Cypress tests passed
