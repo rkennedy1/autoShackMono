@@ -7,8 +7,7 @@ const ScheduleItem: React.FC<{
   index: number;
   onUpdate: Function;
   onDelete: Function;
-  loading: boolean;
-}> = ({ item, index, onUpdate, onDelete, loading }) => {
+}> = ({ item, index, onUpdate, onDelete }) => {
   const handleStartTimeChange = (value: number) => {
     onUpdate(index, { ...item, start_hour: value });
   };
@@ -18,7 +17,10 @@ const ScheduleItem: React.FC<{
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
+    <div
+      style={{ display: "flex", alignItems: "center" }}
+      id={`shackScheduleItem_${index}`}
+    >
       <Typography>
         <Box display="flex" alignItems="center">
           <span>Start Time&nbsp;</span>

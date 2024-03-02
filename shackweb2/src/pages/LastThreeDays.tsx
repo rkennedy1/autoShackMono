@@ -28,7 +28,7 @@ const LastThreeDays = () => {
 
   return (
     <div style={{ height: "50vh", width: "100%" }}>
-      <h2 id="last3DaysHeading">Last 3 Days Waterings</h2>
+      <h2 id="last3DaysHeading">Last 3 Days</h2>
       {loading ? (
         <p>Loading...</p>
       ) : shackData && shackData.length > 0 ? (

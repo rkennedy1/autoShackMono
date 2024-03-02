@@ -85,16 +85,13 @@ const WateringSchedule = () => {
           <p>Loading...</p>
         ) : items.length > 0 ? (
           items.map((item, i) => (
-            <div id={`shackScheduleItem_${i}`}>
-              <ScheduleItem
-                key={i}
-                index={i}
-                item={item}
-                onUpdate={handleUpdateScheduleItem}
-                onDelete={handleDeleteScheduleItem}
-                loading={loading}
-              />
-            </div>
+            <ScheduleItem
+              key={i}
+              index={i}
+              item={item}
+              onUpdate={handleUpdateScheduleItem}
+              onDelete={handleDeleteScheduleItem}
+            />
           ))
         ) : (
           <p>No schedule items available</p>
