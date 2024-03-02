@@ -1,8 +1,7 @@
 name: Build and Push Docker Images to Registry
 
 on:
-  repository_dispatch:
-    types: [trigger-ci]
+  workflow_dispatch:
 
 jobs:
   build:
