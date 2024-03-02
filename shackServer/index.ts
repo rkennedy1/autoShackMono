@@ -3,9 +3,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 import dataRouter from "./src/data.js";
 import scheduleRouter from "./src/schedule.js";
-var RateLimit = require("express-rate-limit");
+import RateLimit from "express-rate-limit";
 
-var limiter = RateLimit({
+const limiter = RateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // max 100 requests per windowMs
 });
