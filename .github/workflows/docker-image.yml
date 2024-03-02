@@ -28,7 +28,7 @@ jobs:
         docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/shack_server
     
     - name: Log in to DigitalOcean registry
-      run: echo "${{ secrets.DIGITALOCEAN_REGISTRY_TOKEN }}" | docker login registry.digitalocean.com/autoshack --username ${{ secrets.DIGITALOCEAN_REGISTRY_USERNAME }} --password-stdin
+      run: docker login -u ${{ secrets.DIGITALOCEAN_REGISTRY_USERNAME }} -p ${{ secrets.DIGITALOCEAN_REGISTRY_TOKEN }} registry.digitalocean.com
 
     - name: Push the Docker images to DigitalOcean registry
       run: |
