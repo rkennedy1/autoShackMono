@@ -2,35 +2,29 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    
-    - uses: actions/checkout@v3
-    
-    - name: Build the Web Docker image
-      run: |
-        cd shackweb2
-        docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/shack_web
+      - uses: actions/checkout@v3
 
-    - name: Build the Server Docker image
-      run: |
-        tsc -v
-        cd shackServer
-        docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/shack_server
-    
-    - name: Log in to DigitalOcean registry
-      run: echo "${{ secrets.DIGITALOCEAN_REGISTRY_TOKEN }}" | docker login -u ${{ secrets.DIGITALOCEAN_REGISTRY_USERNAME }} --password-stdin registry.digitalocean.com
+      - name: Build the Web Docker image
+        run: |
+          cd shackweb2
+          docker build . --file Dockerfile --tag pvnas.tail23302.ts.net/autoshack/shack_web
 
-    - name: Push the Docker images to DigitalOcean registry
-      run: |
-        docker push registry.digitalocean.com/autoshack/shack_server
-        docker push registry.digitalocean.com/autoshack/shack_web
+      - name: Build the Server Docker image
+        run: |
+          tsc -v
+          cd shackServer
+          docker build . --file Dockerfile --tag pvnas.tail23302.ts.net/autoshack/shack_server
+
+      - name: Push the Docker images to DigitalOcean registry
+        run: |
+          docker push pvnas.tail23302.ts.net/autoshack/shack_server
+          docker pvnas.tail23302.ts.net/autoshack/shack_web

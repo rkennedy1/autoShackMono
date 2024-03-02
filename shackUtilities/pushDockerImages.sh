@@ -1,5 +1,6 @@
-docker tag shack_server registry.digitalocean.com/autoshack/shack_server
-docker push registry.digitalocean.com/autoshack/shack_server
+URL=pvnas.tail23302.ts.net/autoshack
+docker tag shack_server $URL/shack_server
+docker push $URL/shack_server
 
-docker tag shack_web registry.digitalocean.com/autoshack/shack_web
-docker push registry.digitalocean.com/autoshack/shack_web
+docker tag shack_web $URL/shack_web
+docker push $URL/shack_web
