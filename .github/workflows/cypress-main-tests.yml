@@ -50,7 +50,7 @@ jobs:
 
       - name: Trigger Build and Push Docker Images to Registry
         if: always() && steps.run-cypress.outputs.test-result == '0'
-        uses: actions/workflow-dispatch@v2
+        uses: actions/trigger-workflow-dispatch@v1
         with:
           workflow: "build-push-docker-image.yml"
           token: ${{ secrets.GITHUB_TOKEN }}
