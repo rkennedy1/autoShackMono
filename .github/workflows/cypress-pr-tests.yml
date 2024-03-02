@@ -1,16 +1,16 @@
-name: Run Cypress Tests
+name: Run Cypress Tests for PRs
 
 on:
   pull_request:
     branches:
       - "*" # This will trigger the workflow for all branches when they create a PR
-  push:
-    branches:
-      - main  # This will trigger the workflow for any push to the main branch
 
 jobs:
   cypress-tests:
     runs-on: [self-hosted, linux] # Only runs on self
+
+    outputs:
+      test-result: ${{ steps.run-cypress.outputs.test-result }}
 
     steps:
       - name: Checkout code
@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18"
-          
+
       - name: Install yarn
         run: npm install -g yarn
 
@@ -39,9 +39,11 @@ jobs:
           sleep 10  # Give some time for the React application to start
 
       - name: Run Cypress tests
+        id: run-cypress
         run: |
           cd shackweb2
           yarn cypress run --record --key b19bca40-c361-4bf7-9f25-1efd583c503b --env branch_name=${{ github.event.pull_request.head.ref }}
+          echo "::set-output name=test-result::$?"
 
       - name: Clean up
         if: always()

@@ -1,10 +1,8 @@
-name: Docker Image CI
+name: Build and Push Docker Images
 
 on:
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+  repository_dispatch:
+    types: [trigger-ci]
 
 jobs:
   build:
@@ -27,4 +25,4 @@ jobs:
       - name: Push the Docker images to registry
         run: |
           docker push localhost/autoshack/shack_server
-          docker localhost/autoshack/shack_web
+          docker push localhost/autoshack/shack_web
