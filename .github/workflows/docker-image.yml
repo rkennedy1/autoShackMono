@@ -16,15 +16,15 @@ jobs:
       - name: Build the Web Docker image
         run: |
           cd shackweb2
-          docker build . --file Dockerfile --tag pvnas.tail23302.ts.net/autoshack/shack_web
+          docker build . --file Dockerfile --tag localhost/autoshack/shack_web
 
       - name: Build the Server Docker image
         run: |
           tsc -v
           cd shackServer
-          docker build . --file Dockerfile --tag pvnas.tail23302.ts.net/autoshack/shack_server
+          docker build . --file Dockerfile --tag localhost/autoshack/shack_server
 
-      - name: Push the Docker images to DigitalOcean registry
+      - name: Push the Docker images to registry
         run: |
-          docker push pvnas.tail23302.ts.net/autoshack/shack_server
-          docker pvnas.tail23302.ts.net/autoshack/shack_web
+          docker push localhost/autoshack/shack_server
+          docker localhost/autoshack/shack_web
