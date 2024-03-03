@@ -13,8 +13,13 @@ jobs:
   cypress-tests:
     runs-on: [self-hosted, linux] # Only runs on self
 
-    outputs:
-      test-result: ${{ steps.run-cypress.outputs.test-result }}
+    container:
+      image: cypress/base:14 # Use an image with Cypress pre-installed
+
+    services:
+      docker:
+        image: docker:19.03.12 # Specify the Docker version
+        options: --privileged # Required for Docker-in-Docker
 
     steps:
       - name: Checkout code
@@ -23,13 +28,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: "14" # Use the desired Node.js version
 
       - name: Install yarn
         run: npm install -g yarn
-
-      - name: Install Cypress dependencies
-        run: apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb -y
 
       - name: Install web dependencies
         run: |
@@ -43,26 +45,21 @@ jobs:
           sleep 10  # Give some time for the React application to start
 
       - name: Run Cypress tests
-        id: run-cypress
         run: |
           cd shackweb2
           yarn cypress run --record --key b19bca40-c361-4bf7-9f25-1efd583c503b --env branch_name=${{ github.event.pull_request.head.ref }}
-          echo "::set-output name=test-result::$?"
 
       - name: Build the Web Docker image
-        if: steps.run-cypress.outputs.test-result == '0'
         run: |
           cd shackweb2
           docker build . --file Dockerfile --tag localhost/autoshack/shack_web
 
       - name: Build the Server Docker image
-        if: steps.run-cypress.outputs.test-result == '0'
         run: |
           cd shackServer
           docker build . --file Dockerfile --tag localhost/autoshack/shack_server
 
       - name: Push the Docker images to registry
-        if: steps.run-cypress.outputs.test-result == '0'
         run: |
           docker push localhost/autoshack/shack_server
           docker push localhost/autoshack/shack_web
