@@ -6,7 +6,7 @@ on:
       - "*" # This will trigger the workflow for all branches when they create a PR
   push:
     branches:
-      - main  # This will trigger the workflow for any push to the main branch
+      - main # This will trigger the workflow for any push to the main branch
 
 jobs:
   cypress-tests:
@@ -20,12 +20,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18"
-          
-      - name: Install yarn
+
+      - name: Install Yarn
         run: npm install -g yarn
 
       - name: Install Cypress dependencies
-        run: apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb -y
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
 
       - name: Install web dependencies
         run: |
@@ -46,5 +48,7 @@ jobs:
       - name: Clean up
         if: always()
         run: |
-          npm uninstall -g yarn
+          if command -v yarn; then
+            npm uninstall -g yarn
+          fi
           pkill -f "yarn start"
