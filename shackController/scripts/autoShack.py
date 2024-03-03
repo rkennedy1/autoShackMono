@@ -57,7 +57,7 @@ class AutoShack:
             self.logger.info("Pump turned ON")
             self.pump_status = "ON"
             # Pump should not be on but flow -> turn OFF
-        elif (not pumpState) and self.flowSensor.flow > 0:
+        elif not pumpState:
             self.pump.pumpOff()
             self.logger.info("Pump turned OFF")
             self.pump_status = "OFF"
@@ -86,15 +86,12 @@ def main():
 
                 # Get the temp, humidity and flow rate
                 A1.logger.info(
-                    "Humidity (%)           :"
-                    + str(A1.tempHumiditySensor.humidity)
+                    "Humidity (%)           :" + str(A1.tempHumiditySensor.humidity)
                 )
                 A1.logger.info(
-                    "Temperature (F)        :"
-                    + str(A1.tempHumiditySensor.temperature)
+                    "Temperature (F)        :" + str(A1.tempHumiditySensor.temperature)
                 )
-                A1.logger.info("Flow Rate  (Liter/min) :"
-                               + str(A1.flowSensor.flow))
+                A1.logger.info("Flow Rate  (Liter/min) :" + str(A1.flowSensor.flow))
 
                 # Get the confifuation file and see if pump should be on
                 if A1.db.connected:
