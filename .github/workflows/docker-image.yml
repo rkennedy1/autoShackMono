@@ -7,6 +7,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        docker_image: ["shack_web", "shack_server"]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -16,13 +20,9 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          cd shackweb2
-          docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/shack_web
-          docker push registry.digitalocean.com/autoshack/shack_web
-
-          cd ../shackServer
-          docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/shack_server
-          docker push registry.digitalocean.com/autoshack/shack_server
+          cd ${{ matrix.docker_image }}
+          docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/${{ matrix.docker_image }}
+          docker push registry.digitalocean.com/autoshack/${{ matrix.docker_image }}
 
       - name: Clean up
         run: |
