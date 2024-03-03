@@ -6,7 +6,7 @@ on:
       - "*" # This will trigger the workflow for all branches when they create a PR
   push:
     branches:
-      - main  # This will trigger the workflow for any push to the main branch
+      - main # This will trigger the workflow for any push to the main branch
 
 jobs:
   cypress-tests:
