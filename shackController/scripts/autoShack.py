@@ -43,7 +43,7 @@ class AutoShack:
         self.pump = Pump(18, self.logger)
         self.pump_status = "unchanged"
         self.db = Database()
-        if self.db.connected():
+        if self.db.connected:
             self.logger.info("Database connected")
         else:
             self.logger.info("No Database connected, using config file")
