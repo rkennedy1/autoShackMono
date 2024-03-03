@@ -21,22 +21,6 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Cache node_modules
-        uses: actions/cache@v2
-        with:
-          path: shackweb2/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('shackweb2/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Cache Cypress binary
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/Cypress
-          key: ${{ runner.os }}-cypress-${{ hashFiles('shackweb2/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-cypress-
-
       - name: Install Yarn
         run: npm install -g yarn
 
