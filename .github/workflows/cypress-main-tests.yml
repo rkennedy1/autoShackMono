@@ -49,17 +49,20 @@ jobs:
           yarn cypress run --record --key b19bca40-c361-4bf7-9f25-1efd583c503b --env branch_name=${{ github.event.pull_request.head.ref }}
           echo "::set-output name=test-result::$?"
 
-      - name: Trigger Build and Push Docker Images to Registry
-        if: always() && steps.run-cypress.outputs.test-result == '0'
+      - name: Build the Web Docker image
+        if: steps.run-cypress.outputs.test-result == '0'
         run: |
-          curl -X POST \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Content-Type: application/json" \
-            "https://api.github.com/repos/rkennedy1/autoshackMono/actions/workflows/build-push-docker-image.yml/dispatches" \
-            -d '{
-              "ref": "main",
-              "inputs": {
-                "trigger_reason": "Cypress tests passed"
-              }
-          }'
+          cd shackweb2
+          docker build . --file Dockerfile --tag localhost/autoshack/shack_web
+
+      - name: Build the Server Docker image
+        if: steps.run-cypress.outputs.test-result == '0'
+        run: |
+          cd shackServer
+          docker build . --file Dockerfile --tag localhost/autoshack/shack_server
+
+      - name: Push the Docker images to registry
+        if: steps.run-cypress.outputs.test-result == '0'
+        run: |
+          docker push localhost/autoshack/shack_server
+          docker push localhost/autoshack/shack_web
