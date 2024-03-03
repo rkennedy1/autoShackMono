@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        docker_image: ["shackweb2", "shackServer"]
+        docker_image: ["shackweb2", "shackserver"]
 
     steps:
       - name: Checkout code
