@@ -1,3 +1,10 @@
+export const apiURL: string = `http://${Cypress.env("baseURL")}:${Cypress.env(
+  "apiPort"
+)}`;
+export const webURL: string = `http://${Cypress.env("baseURL")}:${Cypress.env(
+  "webPort"
+)}`;
+
 export const searchByAriaLabel = (label: string): string =>
   `[aria-label="${label}"]`;
 
@@ -33,17 +40,7 @@ export const getRandomNumber = (max: number): number =>
   Math.floor(Math.random() * Math.floor(max));
 
 export const waitForPageLoad = () => {
-  let isPageLoaded = false;
-  while (!isPageLoaded) {
-    cy.get(searchContainsId("shackScheduleItem"), { timeout: 10000 }).should(
-      "be.visible"
-    );
-    isPageLoaded = true;
-  }
+  cy.get(searchContainsId("shackScheduleItem"), { timeout: 10000 }).should(
+    "be.visible"
+  );
 };
-
-const baseURL: string = "localhost";
-const apiPort: string = "1783";
-const webPort: string = "3000";
-export const apiURL: string = `http://${baseURL}:${apiPort}`;
-export const webURL: string = `http://${baseURL}:${webPort}`;

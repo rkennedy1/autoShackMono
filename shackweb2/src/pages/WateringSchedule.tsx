@@ -1,5 +1,5 @@
 // WateringSchedule.js
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getSchedule,
   updateScheduleItem,
@@ -9,6 +9,7 @@ import {
 import { Button } from "@mui/material";
 import ScheduleItem from "../components/ScheduleItem";
 import { scheduleItem } from "../util/models";
+import Loading from "../components/Loading";
 
 const WateringSchedule = () => {
   const [items, setItems] = useState<scheduleItem[]>([]);
@@ -82,7 +83,7 @@ const WateringSchedule = () => {
         }}
       >
         {loading ? (
-          <p>Loading...</p>
+          <Loading name="WateringSchedule" />
         ) : items.length > 0 ? (
           items.map((item, i) => (
             <ScheduleItem
