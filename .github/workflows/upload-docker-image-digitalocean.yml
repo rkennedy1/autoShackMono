@@ -1,11 +1,15 @@
 name: Docker Image CI
 
 on:
-  workflow_dispatch: # This allows manual triggering
+  workflow_dispatch: # Allow manual triggering
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        image: [shackWeb, shackServer]
 
     steps:
       - name: Checkout code
@@ -14,15 +18,11 @@ jobs:
       - name: Log in to DigitalOcean registry
         run: echo "${{ secrets.DIGITALOCEAN_REGISTRY_TOKEN }}" | docker login -u ${{ secrets.DIGITALOCEAN_REGISTRY_USERNAME }} --password-stdin registry.digitalocean.com
 
-      - name: Build and push Docker images
+      - name: Build and push Docker image
         run: |
-          cd shackweb2
-          docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/shack_web
-          docker push registry.digitalocean.com/autoshack/shack_web
-
-          cd ../shackServer
-          docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/shack_server
-          docker push registry.digitalocean.com/autoshack/shack_server
+          cd ${{ matrix.image }}
+          docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/${{ matrix.image }}
+          docker push registry.digitalocean.com/autoshack/${{ matrix.image }}
 
       - name: Clean up
         run: |
