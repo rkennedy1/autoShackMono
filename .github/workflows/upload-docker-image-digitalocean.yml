@@ -21,7 +21,7 @@ jobs:
       - name: Build and push Docker image
         run: |
           lowercase_image=$(echo "${{ matrix.image }}" | tr '[:upper:]' '[:lower:]')
-          cd matrix.image
+          cd ${{ matrix.image }}
           docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/$lowercase_image
           docker push registry.digitalocean.com/autoshack/$lowercase_image
 
