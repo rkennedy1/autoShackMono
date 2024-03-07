@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        image: [shackweb, shackserver]
+        image: [shackWeb, shackServer]
 
     steps:
       - name: Checkout code
@@ -20,9 +20,10 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          cd ${{ matrix.image }}
-          docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/${{ matrix.image }}
-          docker push registry.digitalocean.com/autoshack/${{ matrix.image }}
+          lowercase_image=$(echo "${{ matrix.image }}" | tr '[:upper:]' '[:lower:]')
+          cd matrix.image
+          docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/$lowercase_image
+          docker push registry.digitalocean.com/autoshack/$lowercase_image
 
       - name: Clean up
         run: |
