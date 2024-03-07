@@ -1,9 +1,11 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import dataRouter from "./src/data.js";
-import scheduleRouter from "./src/schedule.js";
+import dataRouter from "./src/data";
+import scheduleRouter from "./src/schedule";
 import RateLimit from "express-rate-limit";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "./swagger-output.json";
 
 const limiter = RateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -13,8 +15,9 @@ const limiter = RateLimit({
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 1783;
+export const PORT = process.env.PORT || 1783;
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(limiter);
 app.use(cors());
 app.use(express.json());
@@ -27,13 +30,21 @@ app.use(express.static("public"));
 app.use("/images", express.static("images"));
 
 app.post("/lastPicture", (req: Request, res: Response) => {
+  // #swagger.tags = ['Camera']
   lastPicture = req.body.fileName;
   res.send("OK");
 });
 
 app.get("/lastPicture", (req: Request, res: Response) => {
+  // #swagger.tags = ['Camera']
   res.json({ lastPic: lastPicture });
 });
 
 app.use("/data", dataRouter);
 app.use("/schedule", scheduleRouter);
+
+// Error handling middleware
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error(err.stack);
+  res.status(500).send("Something went wrong!");
+});

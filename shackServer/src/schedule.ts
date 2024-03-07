@@ -8,6 +8,7 @@ router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
 router.get("/", function (req: Request, res: Response) {
+  // #swagger.tags = ['Schedule']
   const query =
     "SELECT start_hour, duration, id FROM shackSchedule ORDER BY start_hour";
   db.query(query, function (err: MysqlError | null, result: ShackSchedule[]) {
@@ -21,6 +22,7 @@ router.get("/", function (req: Request, res: Response) {
 });
 
 router.post("/update", function (req: Request, res: Response) {
+  // #swagger.tags = ['Schedule']
   const { start_hour, duration, id } = req.body;
   const query = `UPDATE shackSchedule SET start_hour=?, duration=? WHERE id=?`;
   db.query(
@@ -50,6 +52,7 @@ router.post("/update", function (req: Request, res: Response) {
 });
 
 router.post("/add", function (req: Request, res: Response) {
+  // #swagger.tags = ['Schedule']
   const { start_hour, duration } = req.body;
   const query = `INSERT INTO shackSchedule (start_hour, duration) VALUES (?, ?)`;
   db.query(
@@ -79,6 +82,7 @@ router.post("/add", function (req: Request, res: Response) {
 });
 
 router.post("/delete", function (req: Request, res: Response) {
+  // #swagger.tags = ['Schedule']
   const { id } = req.body;
   const query = `DELETE FROM shackSchedule WHERE id = ?`;
   db.query(
