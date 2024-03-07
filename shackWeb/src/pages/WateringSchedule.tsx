@@ -33,13 +33,15 @@ const WateringSchedule = () => {
   ) => {
     setLoading(true);
     try {
-      const newItem = updatedItem.id
+      console.log();
+      const responseItem = updatedItem.id
         ? await updateScheduleItem(updatedItem)
         : await addScheduleItem(updatedItem);
-      if (newItem) {
+      console.log(responseItem!.id);
+      if (responseItem) {
         setItems((prevItems) => {
           const updatedItems = [...prevItems];
-          updatedItems[index] = newItem;
+          updatedItems[index] = updatedItem;
           return updatedItems;
         });
       }

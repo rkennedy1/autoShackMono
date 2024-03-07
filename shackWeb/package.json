@@ -22,8 +22,8 @@
   },
   "devDependencies": {
     "axios": "^1.6.7",
-    "cypress": "^13.6.6",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "cypress": "^13.6.6"
   },
   "scripts": {
     "start": "react-scripts start",

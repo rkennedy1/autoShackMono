@@ -54,7 +54,7 @@ export async function addScheduleItem(
 ): Promise<scheduleItem | null> {
   try {
     const response = await axiosInstance.post("/schedule/add", item);
-    return response.data[0];
+    return response.data;
   } catch (error) {
     console.error("Error add schedule item:", error);
     return null;

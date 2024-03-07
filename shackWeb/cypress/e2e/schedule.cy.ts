@@ -4,8 +4,9 @@ import { selectors } from "../selectors/scheduleSelectors";
 
 describe("verify persisted data", () => {
   it("passes", () => {
-    cy.visit(webURL);
+    mockLastThreeDay();
     mockGetScheduleItems();
+    cy.visit(webURL);
     waitForPageLoad();
     cy.get(selectors.shackScheduleHeading).contains("Shack Schedule");
     verifyScheduleItems();
@@ -14,26 +15,36 @@ describe("verify persisted data", () => {
 
 describe("verify new line", () => {
   it("passes", () => {
-    cy.visit(webURL);
+    mockLastThreeDay();
     mockGetScheduleItems();
+    cy.visit(webURL);
     waitForPageLoad();
     cy.get(selectors.addNewItemButton).click();
+    mockGetScheduleItems();
     ScheduleItems.push({ id: 4, start_hour: 0, duration: 0 });
 
     mockInsertScheduleItem();
+    mockGetScheduleItems("scheduleItemsInserted.json");
     modifyScheduleItem(4, 20, 12);
+    console.log(`ScheduleItems: ${JSON.stringify(ScheduleItems)}`);
     verifyScheduleItems(selectors.plusButton);
   });
 });
 
-function mockGetScheduleItems() {
+function mockLastThreeDay() {
+  cy.intercept("GET", `${apiURL}/data/lastThreeDays`, {
+    fixture: "empty.json",
+  });
+}
+
+function mockGetScheduleItems(fixture?: string) {
   cy.intercept("GET", `${apiURL}/schedule`, {
-    fixture: "scheduleItems.json",
+    fixture: fixture || "scheduleItems.json",
   });
 }
 
 function mockInsertScheduleItem() {
-  cy.intercept("POST", `${apiURL}/schedule`, {
+  cy.intercept("POST", `${apiURL}/schedule/add`, {
     fixture: "scheduleItem.json",
   });
 }
