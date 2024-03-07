@@ -28,12 +28,12 @@ const LastThreeDays = () => {
   }, []);
 
   return (
-    <div style={{ height: "50vh", width: "100%" }}>
+    <div style={{ height: "50vh", width: "100%" }} id="LastThreeDays-page">
       <h2 id="last3DaysHeading">Last 3 Days</h2>
       {loading ? (
         <Loading name="lastThreeDays" />
       ) : shackData && shackData.length > 0 ? (
-        <ShackGraph data={shackData} />
+        <ShackGraph graphData={shackData} />
       ) : (
         <p>{NO_DATA_MESSAGE}</p>
       )}

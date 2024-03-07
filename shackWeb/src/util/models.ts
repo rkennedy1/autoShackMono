@@ -11,10 +11,6 @@ export interface scheduleItem {
   duration: number;
 }
 
-export interface graphProps {
-  data: shacklogItem[];
-}
-
 export type shacklogGraphItem = {
   date: Date;
   data: number;
@@ -23,4 +19,9 @@ export type shacklogGraphItem = {
 export type Series = {
   label: string;
   data: shacklogGraphItem[];
+};
+
+export type growWeek = {
+  stage: "bloom" | "veg";
+  week: number;
 };

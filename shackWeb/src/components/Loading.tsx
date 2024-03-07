@@ -1,8 +1,12 @@
 import { RotatingLines } from "react-loader-spinner";
 
-const Loading: React.FC<{ name: string }> = ({ name }) => {
+interface Props {
+  name: string;
+}
+
+const Loading: React.FC<Props> = ({ name }) => {
   return (
-    <div style={{ margin: "10vh" }} id={`loading-${name}`}>
+    <div style={{ margin: "10vh" }} id={`loading-${name}-component`}>
       <RotatingLines
         visible={true}
         width="96"

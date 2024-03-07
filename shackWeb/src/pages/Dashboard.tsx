@@ -1,6 +1,7 @@
 import { Grid } from "@mui/material";
 import LastThreeDays from "./LastThreeDays";
 import WateringSchedule from "./WateringSchedule";
+import GrowCycleTracking from "./GrowCycleTracking";
 
 const Dashboard = () => {
   return (
@@ -10,6 +11,7 @@ const Dashboard = () => {
       </Grid>
       <Grid item xs={6}>
         <WateringSchedule />
+        <GrowCycleTracking />
       </Grid>
     </Grid>
   );

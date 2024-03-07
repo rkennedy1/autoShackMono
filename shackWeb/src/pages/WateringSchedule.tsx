@@ -75,7 +75,7 @@ const WateringSchedule = () => {
   };
 
   return (
-    <div>
+    <div id="wateringSchedule-page">
       <h2 id="shackScheduleHeading">Shack Schedule</h2>
       <div
         style={{

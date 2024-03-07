@@ -1,24 +1,28 @@
 import { AxisOptions, Chart } from "react-charts";
-import { graphProps, Series, shacklogGraphItem } from "../util/models";
+import { Series, shacklogGraphItem, shacklogItem } from "../util/models";
 import React from "react";
 
-const ShackGraph = (props: graphProps) => {
+interface Props {
+  graphData: shacklogItem[];
+}
+
+const ShackGraph: React.FC<Props> = ({ graphData }) => {
   const data: Series[] = [
     {
       label: "Flow Rate",
-      data: props.data.map((item) => {
+      data: graphData.map((item) => {
         return { date: new Date(item.datetime), data: item.flow_rate * 10 };
       }),
     },
     {
       label: "Humidity",
-      data: props.data.map((item) => {
+      data: graphData.map((item) => {
         return { date: new Date(item.datetime), data: item.humidity };
       }),
     },
     {
       label: "Temperature",
-      data: props.data.map((item) => {
+      data: graphData.map((item) => {
         return { date: new Date(item.datetime), data: item.temperature };
       }),
     },
@@ -46,6 +50,7 @@ const ShackGraph = (props: graphProps) => {
         primaryAxis,
         secondaryAxes,
       }}
+      id="shackGraph-component"
     />
   );
 };

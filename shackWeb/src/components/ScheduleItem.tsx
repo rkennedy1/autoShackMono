@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { Typography, Button, TextField, Box, Tooltip } from "@mui/material";
 import { scheduleItem } from "../util/models";
 
-const ScheduleItem: React.FC<{
+interface Props {
   item: scheduleItem;
   index: number;
   onUpdate: Function;
   onDelete: Function;
-}> = ({ item, index, onUpdate, onDelete }) => {
+}
+
+const ScheduleItem: React.FC<Props> = ({ item, index, onUpdate, onDelete }) => {
   const [startTime, setStartTime] = useState(item.start_hour);
   const [duration, setDuration] = useState(item.duration);
 
@@ -26,7 +28,7 @@ const ScheduleItem: React.FC<{
   return (
     <div
       style={{ display: "flex", alignItems: "center" }}
-      id={`shackScheduleItem_${index}`}
+      id={`shackScheduleItem-${index}-component`}
     >
       <Typography>
         <Box display="flex" alignItems="center">
