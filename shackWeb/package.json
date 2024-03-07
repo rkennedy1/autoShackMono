@@ -18,12 +18,12 @@
     "react-dom": "^18.2.0",
     "react-loader-spinner": "^6.0.0",
     "typescript": "^5.4.2",
-    "web-vitals": "^3.5.2",
-    "cypress": "^13.6.6"
+    "web-vitals": "^3.5.2"
   },
   "devDependencies": {
     "axios": "^1.6.7",
     "react-scripts": "5.0.1",
+    "cypress": "^13.6.6"
   },
   "scripts": {
     "start": "react-scripts start",

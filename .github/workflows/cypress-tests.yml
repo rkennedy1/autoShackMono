@@ -11,6 +11,9 @@ on:
 jobs:
   cypress-tests:
     runs-on: [self-hosted, linux] # Only runs on self
+    defaults:
+      run:
+        working-directory: shackWeb # Set default working directory for all steps
 
     steps:
       - name: Checkout code
@@ -28,9 +31,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
-
-      - name: Set up directory
-        run: cd shackWeb
 
       - name: Install dependencies
         run: yarn install
