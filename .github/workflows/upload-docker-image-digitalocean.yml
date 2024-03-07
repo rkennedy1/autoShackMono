@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        image: [shackWeb, shackServer]
+        image: [shackweb, shackserver]
 
     steps:
       - name: Checkout code
