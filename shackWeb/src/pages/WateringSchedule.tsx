@@ -87,21 +87,23 @@ const WateringSchedule = () => {
         {loading ? (
           <Loading name="WateringSchedule" />
         ) : items.length > 0 ? (
-          items.map((item, i) => (
-            <ScheduleItem
-              key={i}
-              index={i}
-              item={item}
-              onUpdate={handleUpdateScheduleItem}
-              onDelete={handleDeleteScheduleItem}
-            />
-          ))
+          <div>
+            {items.map((item, i) => (
+              <ScheduleItem
+                key={i}
+                index={i}
+                item={item}
+                onUpdate={handleUpdateScheduleItem}
+                onDelete={handleDeleteScheduleItem}
+              />
+            ))}
+            <Button onClick={handleAddNewItem} id="AddNewItemButton">
+              Add New Item
+            </Button>
+          </div>
         ) : (
           <p>No schedule items available</p>
         )}
-        <Button onClick={handleAddNewItem} id="AddNewItemButton">
-          Add New Item
-        </Button>
       </div>
     </div>
   );
