@@ -1,0 +1,30 @@
+name: Docker Image CI
+
+on:
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        image: [shackWeb, shackServer]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to DigitalOcean registry
+        run: echo "${{ secrets.DIGITALOCEAN_REGISTRY_TOKEN }}" | docker login -u ${{ secrets.DIGITALOCEAN_REGISTRY_USERNAME }} --password-stdin registry.digitalocean.com
+
+      - name: Build and push Docker image
+        run: |
+          cd ${{ matrix.image }}
+          docker build . --file Dockerfile --tag registry.digitalocean.com/autoshack/${{ matrix.image }}
+          docker push registry.digitalocean.com/autoshack/${{ matrix.image }}
+
+      - name: Clean up
+        run: |
+          docker system prune -f
+          docker logout registry.digitalocean.com

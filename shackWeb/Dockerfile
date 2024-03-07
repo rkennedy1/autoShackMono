@@ -1,27 +1,27 @@
 # Dockerfile
 
-#Stage 1
-FROM node:19-alpine as build
+# Stage 1: Build
+FROM node:alpine as build
 
 WORKDIR /app
 
-COPY package.json .
+COPY package.json yarn.lock ./
 
-COPY yarn.lock .
+# Install dependencies
+RUN yarn install --frozen-lockfile --silent
 
-RUN yarn
-
+# Copy and build the application
 COPY . .
-
 RUN yarn build
 
-# Stage 2
-FROM nginx:1.25.3 as nginx
+# Stage 2: Production image
+FROM nginx:1.25.3
 
-WORKDIR /usr/share/nginx/html
+# Copy built files from the previous stage
+COPY --from=build /app/build /usr/share/nginx/html
 
-RUN rm -rf ./*
-
-COPY --from=build /app/build .
+# Expose port
 EXPOSE 80
-CMD [ "nginx", "-g", "daemon off;" ]
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]

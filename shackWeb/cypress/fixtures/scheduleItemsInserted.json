@@ -1,0 +1,23 @@
+[
+    {
+      "id": 1,
+      "start_hour": 9,
+      "duration": 60
+    },
+    {
+      "id": 2,
+      "start_hour": 13,
+      "duration": 120
+    },
+    {
+      "id": 3,
+      "start_hour": 16,
+      "duration": 90
+    },
+    {
+      "id": 4,
+      "start_hour": 20,
+      "duration": 12
+    }
+  ]
+  
