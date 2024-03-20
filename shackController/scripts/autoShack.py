@@ -1,136 +1,136 @@
 #!/usr/bin/env python3
-from logging.handlers import TimedRotatingFileHandler
-from humidityTempSensor import HumidityTempSensor
-from pump import Pump
-from flow import FlowSensor
-from sqlDatabase import Database
+import logging
+import os
 import time
 from datetime import datetime
-import os
-import logging
-from pythonjsonlogger import jsonlogger
+
+from logging.handlers import TimedRotatingFileHandler
+import MySQLdb
+
+
 from configData import ConfigData
+from flow import FlowSensor
+from humidityTempSensor import HumidityTempSensor
+from pump import Pump
+from sqlDatabase import Database
+
+root_dir = os.path.realpath(os.path.join(os.path.dirname(__file__), ".."))
 
 
 class AutoShack:
+    """
+    This class represents the AutoShack controller.
+    """
+
     def __init__(self):
-        #  set up some basic logging... look in the shack.log file for details
-        #  of an execution of the program.
-        self.ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), ".."))
-        self.logger = logging.getLogger("Autoshack rotating human readable log")
+        # Set up logging
+        self.logger = logging.getLogger("AutoShack")
         self.logger.setLevel(logging.INFO)
-        self.datalogger = logging.getLogger("Autoshack data log")
-        self.datalogger.setLevel(logging.INFO)
-        # rotate the logs once a day, and keep 5 versions
         handler = TimedRotatingFileHandler(
-            self.ROOT_DIR + "/logs/shack.log", when="D", interval=1, backupCount=5
+            os.path.join(root_dir, "logs", "shack.log"),
+            when="D",
+            interval=1,
+            backupCount=5,
         )
-        # rotate the logs once a day, and keep 5 versions
-        datahandler = TimedRotatingFileHandler(
-            self.ROOT_DIR + "/logs/shackdata.log", when="D", interval=1, backupCount=5
-        )
-        formatter = logging.Formatter("%(asctime)s - %(message)s")
-        dataformatter = jsonlogger.JsonFormatter()
-        handler.setFormatter(formatter)
-        datahandler.setFormatter(dataformatter)
+        handler.setFormatter(logging.Formatter("%(asctime)s - %(message)s"))
         self.logger.addHandler(handler)
-        self.datalogger.addHandler(datahandler)
         self.logger.info("Begin AutoShack")
 
-        self.desiredPumpStateOn = False
-        self.tempHumiditySensor = HumidityTempSensor(27, self.logger)
-        self.flowSensor = FlowSensor(23, self.logger)
+        # Initialize components
+        self.temp_humidity_sensor = HumidityTempSensor(27, self.logger)
+        self.flow_sensor = FlowSensor(23, self.logger)
         self.pump = Pump(18, self.logger)
-        self.pump_status = "unchanged"
-        self.db = Database()
-        if self.db.connected:
-            self.logger.info("Database connected")
-        else:
-            self.logger.info("No Database connected, using config file")
-
+        self.database = Database()
         self.config = ConfigData()
+        self.pump_status = "unchanged"
 
-    def setPumpState(self, pumpState):
-        if pumpState and self.flowSensor.flow == 0:
-            # Pump should be on but no flow -> turn it ON
-            self.pump.pumpOn()
+    def set_pump(self, pump_state):
+        """
+        Set the state of the pump based on the given pump_state.
+
+        Args:
+            pump_state (bool): The desired state of the pump.
+        """
+        if pump_state and self.flow_sensor.flow == 0:
+            self.pump.pump_on()
             self.logger.info("Pump turned ON")
             self.pump_status = "ON"
-            # Pump should not be on but flow -> turn OFF
-        elif not pumpState:
-            self.pump.pumpOff()
+        elif not pump_state:
+            self.pump.pump_off()
             self.logger.info("Pump turned OFF")
             self.pump_status = "OFF"
         else:
             self.logger.info("Pump unchanged")
             self.pump_status = "unchanged"
 
-    # This method calls the functions to get the various readings
-    # Temp and Humidity + flow are currently collected.  more can be added later.
-
-    def getReadings(self):
-        self.tempHumiditySensor.getReading()
-        self.flowSensor.getFlow()
+    def get_readings(self):
+        """
+        Get the readings from the temperature/humidity sensor and flow sensor.
+        """
+        self.temp_humidity_sensor.get_reading()
+        self.flow_sensor.get_flow()
 
 
 def main():
-    # Initialize the AutoShaq
-    A1 = AutoShack()
-    data = []
+    """
+    Main function for Autoshack
+    """
+    auto_shack = AutoShack()
     try:
         while True:
-            # Every Minute
             if datetime.now().second == 0:
-                # average over 1 minute
-                A1.getReadings()
-
-                # Get the temp, humidity and flow rate
-                A1.logger.info(
-                    "Humidity (%)           :" + str(A1.tempHumiditySensor.humidity)
+                auto_shack.get_readings()
+                auto_shack.logger.info(
+                    "Humidity (%%): %s", auto_shack.temp_humidity_sensor.humidity
                 )
-                A1.logger.info(
-                    "Temperature (F)        :" + str(A1.tempHumiditySensor.temperature)
+                auto_shack.logger.info(
+                    "Temperature (F): %s", auto_shack.temp_humidity_sensor.temperature
                 )
-                A1.logger.info("Flow Rate  (Liter/min) :" + str(A1.flowSensor.flow))
+                auto_shack.logger.info(
+                    "Flow Rate (Liter/min): %s", auto_shack.flow_sensor.flow
+                )
 
-                # Get the confifuation file and see if pump should be on
-                if A1.db.connected:
-                    A1.config.getConfigurationDataFromDB()
-                else:
-                    A1.config.getConfigurationDataFromFile()
+                if auto_shack.database.connected:
+                    try:
+                        auto_shack.config.getConfigurationDataFromDB()
+                    except (MySQLdb.Error, MySQLdb.Warning) as err:
+                        auto_shack.logger.info("Database error")
+                        auto_shack.logger.info(err)
+                        auto_shack.config.getConfigurationDataFromFile()
+                    else:
+                        auto_shack.config.getConfigurationDataFromFile()
 
-                A1.config.setDesiredPumpState()
+                auto_shack.config.setDesiredPumpState()
+                auto_shack.set_pump(auto_shack.config.desiredPumpStateOn)
 
-                # Turn the pump ON or OFF depending on config and flow
-                A1.setPumpState(A1.config.desiredPumpStateOn)
-
-                # Record the data to log(s)
                 data = {
                     "datetime": datetime.now(),
-                    "humidity": A1.tempHumiditySensor.humidity,
-                    "temperature": A1.tempHumiditySensor.temperature,
-                    "flow_rate": A1.flowSensor.flow,
-                    "pump_status": A1.pump_status,
+                    "humidity": auto_shack.temp_humidity_sensor.humidity,
+                    "temperature": auto_shack.temp_humidity_sensor.temperature,
+                    "flow_rate": auto_shack.flow_sensor.flow,
+                    "pump_status": auto_shack.pump_status,
                 }
 
-                # Log to the database if we have a good connection
-                if A1.db.connected:
-                    A1.db.insertData(data)
-
-                A1.datalogger.info(data)
-                # wait so that we don't loop inside a second
+                if auto_shack.database.connected:
+                    try:
+                        auto_shack.database.insert_data(data)
+                    except (MySQLdb.Error, MySQLdb.Warning) as err:
+                        auto_shack.logger.info("Database error")
+                        auto_shack.logger.info(err)
+                auto_shack.logger.info(data)
                 time.sleep(1)
 
     except KeyboardInterrupt:
         pass
 
-    return A1
+    return auto_shack
 
 
 if __name__ == "__main__":
-
-    s = time.perf_counter()
-    A1 = main()
-    elapsed = time.perf_counter() - s
-    A1.logger.info(f"{__file__} executed in {elapsed:0.2f} seconds.")
-    A1.logger.info("End AutoShack")
+    start_time = time.perf_counter()
+    auto_shack_instance = main()
+    elapsed_time = time.perf_counter() - start_time
+    auto_shack_instance.logger.info(
+        "%s executed in %.2f seconds.", __file__, elapsed_time
+    )
+    auto_shack_instance.logger.info("End AutoShack")
