@@ -51,7 +51,11 @@ class ConfigData:
         parsed_config_data = []
         for line in data:
             parsed_config_data.append(
-                {"id": line[0], "start_hour": int(line[1]), "duration": int(line[2])}
+                {
+                    "id": line[0],
+                    "start_hour": int(line[1]),
+                    "duration": int(line[2]),
+                }
             )
         return parsed_config_data
 
@@ -71,7 +75,8 @@ class ConfigData:
         query = "SELECT * FROM shackSchedule"
         try:
             data = self.database.query_data(query)
-            self.schedule_data = self.parse_configuration_data(data)
+            if data:
+                self.schedule_data = self.parse_configuration_data(data)
         except mysql.connector.Error as e:
             self.logger.error(f"Error retrieving configuration data from database: {e}")
             self.get_configuration_data_from_file()
