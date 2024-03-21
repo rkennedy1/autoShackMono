@@ -36,7 +36,7 @@ jobs:
           record: true
           parallel: true
           group: 'Cypress tests'
-          browser: chrome
+          browser: electron
           env: branch_name=${{ github.event.pull_request.head.ref }}
 
       - name: Clean up
