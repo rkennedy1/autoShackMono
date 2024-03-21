@@ -37,7 +37,12 @@ jobs:
           parallel: true
           group: 'Cypress tests'
           browser: electron
-          env: branch_name=${{ github.event.pull_request.head.ref }}
+        env: 
+          branch_name: ${{ github.event.pull_request.head.ref }}
+           # pass the Cypress Cloud record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # pass the project ID from the secrets through environment variable
+          CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
 
       - name: Clean up
         if: always()
