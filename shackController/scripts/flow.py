@@ -28,13 +28,14 @@ class FlowSensor:
         self.flow = 0
         self.setup()
 
-    def count_pulse(self):
+    def count_pulse(self, channel):
         """
         The function `count_pulse` increments a count and calculates flow based on the count.
         """
         if self.start_counter:
             self.count = self.count + 1
             self.flow = self.count / (60 * 7.5)
+            self.logger.info(f"Flow rate: {self.flow} L/min")
 
     def setup(self):
         """
