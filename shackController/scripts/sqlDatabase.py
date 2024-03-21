@@ -34,9 +34,9 @@ class Database:
             self.connected = True
         except mysql.connector.Error as err:
             self.connected = False
-            self.logger.error(f"Error connecting to database: {err}")
-            print("Connection error")
-            print(err)
+            err_msg = f"Error connecting to database: {err}"
+            self.logger.error(err_msg)
+            print(err_msg)
 
     def insert_shack_data(self, data):
         """
@@ -53,9 +53,9 @@ class Database:
             self.database.commit()
         except mysql.connector.Error as err:
             self.connected = False
-            self.logger.error(f"Error inserting data into database: {err}")
-            print("Insert data error")
-            print(err)
+            err_msg = f"Error inserting data into database: {err}"
+            self.logger.error(err_msg)
+            print(err_msg)
 
     def query_data(self, query):
         """
@@ -68,9 +68,9 @@ class Database:
             return self.cursor.fetchall()
         except mysql.connector.Error as err:
             self.connected = False
-            self.logger.error(f"Error querying data from database: {err}")
-            print("Query data error")
-            print(err)
+            err_msg = f"Error querying data from database: {err}"
+            self.logger.error(err_msg)
+            print(err_msg)
             return None
 
     def reconnect(self):
@@ -89,9 +89,9 @@ class Database:
             self.connected = True
         except mysql.connector.Error as err:
             self.connected = False
-            self.logger.error(f"Error reconnecting to database: {err}")
-            print("Reconnect error")
-            print(err)
+            err_msg = f"Error reconnecting to database: {err}"
+            self.logger.error(err_msg)
+            print(err_msg)
 
 
 # def main():
