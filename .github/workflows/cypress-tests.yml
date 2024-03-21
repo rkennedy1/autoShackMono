@@ -27,25 +27,11 @@ jobs:
       - name: Install Yarn
         run: npm install -g yarn
 
-      - name: Install Cypress dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
-
-      - name: Install dependencies
-        run: yarn install
-        working-directory: shackWeb # Specify working directory for this step
-
-      - name: Start React application
-        run: |
-          yarn start &
-          sleep 10  # Give some time for the React application to start
-        working-directory: shackWeb # Specify working directory for this step
-
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
           start: yarn start
+          working-directory: shackWeb
           wait-on: 'http://localhost:3000'
           record: true
           parallel: true
