@@ -52,6 +52,7 @@ class Database:
             self.cursor.execute(sql)
             self.database.commit()
         except mysql.connector.Error as err:
+            self.connected = False
             self.logger.error(f"Error inserting data into database: {err}")
             print("Insert data error")
             print(err)
@@ -66,6 +67,7 @@ class Database:
             self.cursor.execute(query)
             return self.cursor.fetchall()
         except mysql.connector.Error as err:
+            self.connected = False
             self.logger.error(f"Error querying data from database: {err}")
             print("Query data error")
             print(err)
