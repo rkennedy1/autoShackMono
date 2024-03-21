@@ -55,7 +55,7 @@ class AutoShack:
             self.pump.pump_on()
             self.logger.info("Pump turned ON")
             self.pump_status = "ON"
-        elif not pump_state:
+        elif not pump_state and self.flow_sensor.flow > 0:
             self.pump.pump_off()
             self.logger.info("Pump turned OFF")
             self.pump_status = "OFF"
