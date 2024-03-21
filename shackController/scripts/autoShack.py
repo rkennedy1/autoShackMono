@@ -40,7 +40,7 @@ class AutoShack:
         self.temp_humidity_sensor = HumidityTempSensor(27, self.logger)
         self.flow_sensor = FlowSensor(23, self.logger)
         self.pump = Pump(18, self.logger)
-        self.database = Database()
+        self.database = Database(self.logger)
         self.config = ConfigData(self.database, self.logger)
         self.pump_status = "unchanged"
 
@@ -98,6 +98,7 @@ def main():
                         auto_shack.logger.info(err)
                         auto_shack.config.get_configuration_data_from_db()
                     else:
+                        auto_shack.database.reconnect()
                         auto_shack.config.get_configuration_data_from_file()
 
                 auto_shack.config.set_desired_pump_state()

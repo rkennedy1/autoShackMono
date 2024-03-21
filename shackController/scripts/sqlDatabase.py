@@ -20,19 +20,22 @@ class Database:
         query_data: The `query_data` function queries data from a MySQL database table called `shacklog`.
     """
 
-    def __init__(self):
-
+    def __init__(self, logger):
+        self.logger = logger
         try:
-            self.db = mysql.connector.connect(
+            self.database = mysql.connector.connect(
                 host=os.getenv("MYSQL_HOST"),
                 user=os.getenv("MYSQL_USER"),
                 password=os.getenv("MYSQL_PASSWORD"),
                 database=os.getenv("MYSQL_DATABASE"),
             )
-            self.cursor = self.db.cursor()
+            self.cursor = self.database.cursor()
+            self.logger.info("Connected to database")
             self.connected = True
         except mysql.connector.Error as err:
             self.connected = False
+            self.logger.error(f"Error connecting to database: {err}")
+            print("Connection error")
             print(err)
 
     def insert_shack_data(self, data):
@@ -47,8 +50,9 @@ class Database:
                 f" VALUES (\"{data['datetime']}\", {data['humidity']}, {data['temperature']}, {data['flow_rate']}, \"{data['pump_status']}\", 0)"
             )
             self.cursor.execute(sql)
-            self.db.commit()
+            self.database.commit()
         except mysql.connector.Error as err:
+            self.logger.error(f"Error inserting data into database: {err}")
             print("Insert data error")
             print(err)
 
@@ -62,6 +66,7 @@ class Database:
             self.cursor.execute(query)
             return self.cursor.fetchall()
         except mysql.connector.Error as err:
+            self.logger.error(f"Error querying data from database: {err}")
             print("Query data error")
             print(err)
             return None
@@ -71,16 +76,18 @@ class Database:
         The `reconnect` function reconnects to the MySQL database.
         """
         try:
-            self.db = mysql.connector.connect(
+            self.database = mysql.connector.connect(
                 host=os.getenv("MYSQL_HOST"),
                 user=os.getenv("MYSQL_USER"),
                 password=os.getenv("MYSQL_PASSWORD"),
                 database=os.getenv("MYSQL_DATABASE"),
             )
-            self.cursor = self.db.cursor()
+            self.cursor = self.database.cursor()
             self.connected = True
         except mysql.connector.Error as err:
             self.connected = False
+            self.logger.error(f"Error reconnecting to database: {err}")
+            print("Reconnect error")
             print(err)
 
 
