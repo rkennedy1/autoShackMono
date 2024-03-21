@@ -35,7 +35,6 @@ class FlowSensor:
         if self.start_counter:
             self.count = self.count + 1
             self.flow = self.count / (60 * 7.5)
-            self.logger.info(f"Flow rate: {self.flow} L/min")
 
     def setup(self):
         """
