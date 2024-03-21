@@ -85,6 +85,7 @@ class Database:
                 database=os.getenv("MYSQL_DATABASE"),
             )
             self.cursor = self.database.cursor()
+            self.logger.info("Reconnected to database")
             self.connected = True
         except mysql.connector.Error as err:
             self.connected = False
