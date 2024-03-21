@@ -27,21 +27,22 @@ jobs:
       - name: Install Yarn
         run: npm install -g yarn
 
-      - name: Install Cypress dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
-
-      - name: Install dependencies
-        run: yarn install
-
-      - name: Start React application
-        run: |
-          yarn start &
-          sleep 10  # Give some time for the React application to start
-
       - name: Run Cypress tests
-        run: yarn cypress run --record --key b19bca40-c361-4bf7-9f25-1efd583c503b --env branch_name=${{ github.event.pull_request.head.ref }}
+        uses: cypress-io/github-action@v6
+        with:
+          start: yarn start
+          working-directory: shackWeb
+          wait-on: 'http://localhost:3000'
+          record: true
+          parallel: true
+          group: 'Cypress tests'
+          browser: electron
+        env: 
+          branch_name: ${{ github.event.pull_request.head.ref }}
+           # pass the Cypress Cloud record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # pass the project ID from the secrets through environment variable
+          CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
 
       - name: Clean up
         if: always()
