@@ -97,9 +97,9 @@ def main():
                         auto_shack.logger.info("Database error")
                         auto_shack.logger.info(err)
                         auto_shack.config.get_configuration_data_from_db()
-                    else:
-                        auto_shack.database.reconnect()
-                        auto_shack.config.get_configuration_data_from_file()
+                else:
+                    auto_shack.database.reconnect()
+                    auto_shack.config.get_configuration_data_from_file()
 
                 auto_shack.config.set_desired_pump_state()
                 auto_shack.set_pump(auto_shack.config.desired_pump_state_on)
