@@ -27,21 +27,20 @@ jobs:
       - name: Install Yarn
         run: npm install -g yarn
 
-      - name: Install Cypress dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
-
       - name: Install dependencies
         run: yarn install
 
-      - name: Start React application
-        run: |
-          yarn start &
-          sleep 10  # Give some time for the React application to start
-
       - name: Run Cypress tests
-        run: yarn cypress run --record --key b19bca40-c361-4bf7-9f25-1efd583c503b --env branch_name=${{ github.event.pull_request.head.ref }}
+        uses: cypress-io/github-action@v6
+        with:
+          start: yarn start
+          wait-on: 'http://localhost:3000'
+          record: true
+          record-key: ${{ secrets.CYPRESS_RECORD_KEY }} # Make sure you have this secret set up in your repository secrets
+          parallel: true
+          group: 'Cypress tests'
+          browser: chrome
+          env: branch_name=${{ github.event.pull_request.head.ref }}
 
       - name: Clean up
         if: always()
