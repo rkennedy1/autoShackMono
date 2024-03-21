@@ -36,10 +36,9 @@ jobs:
           start: yarn start
           wait-on: 'http://localhost:3000'
           record: true
-          record-key: ${{ secrets.CYPRESS_RECORD_KEY }} # Make sure you have this secret set up in your repository secrets
           parallel: true
           group: 'Cypress tests'
-          browser: chrome
+          browser: electron
           env: branch_name=${{ github.event.pull_request.head.ref }}
 
       - name: Clean up
