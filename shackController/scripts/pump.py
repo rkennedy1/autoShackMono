@@ -6,6 +6,16 @@ import RPi.GPIO as GPIO
 class Pump:
     """
     A class representing a pump.
+
+    Attributes:
+        pin: The `pin` attribute is an integer representing the GPIO pin number to which the pump is connected.
+        logger: The `logger` attribute is an instance of the `Logger` class that is used to log messages to the console.
+
+    Methods:
+        setup: The `setup` method initializes the GPIO pins for output in BCM mode with warnings disabled.
+        pump_on: The `pumpOn` method turns on a pump by setting the GPIO pin to HIGH.
+        pump_off: The `pumpOff` method turns off a GPIO pin by setting it to LOW.
+        run_pump: The `runPump` method turns on a pump for a specified duration and then turns it off.
     """
 
     def __init__(self, pin, logger):

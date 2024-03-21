@@ -4,7 +4,20 @@ import RPi.GPIO as GPIO
 
 class FlowSensor:
     """
-    Represents a flow sensor that counts pulses and calculates flow rate based on the pulse count.
+    The FlowSensor class represents a flow sensor that measures the flow rate of a liquid.
+    It provides methods to count pulses and calculate the flow rate based on the count value.
+
+    Attributes:
+        pin: The GPIO pin number to which the flow sensor is connected.
+        logger: The logger object for logging messages.
+        count: The number of pulses counted by the sensor.
+        start_counter: A boolean value indicating whether the counter is active.
+        flow: The flow rate calculated based on the count value.
+
+    Methods:
+        count_pulse: Increments the count and calculates flow based on the count.
+        setup: Configures a GPIO pin for input with a pull-up resistor and adds an event detection.
+        get_flow: Calculates the flow rate based on a count value and a time delay.
     """
 
     def __init__(self, pin, logger):
@@ -17,7 +30,7 @@ class FlowSensor:
 
     def count_pulse(self):
         """
-        The function `countPulse` increments a count and calculates flow based on the count.
+        The function `count_pulse` increments a count and calculates flow based on the count.
         """
         if self.start_counter:
             self.count = self.count + 1

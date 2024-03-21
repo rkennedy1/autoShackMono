@@ -41,7 +41,7 @@ class AutoShack:
         self.flow_sensor = FlowSensor(23, self.logger)
         self.pump = Pump(18, self.logger)
         self.database = Database()
-        self.config = ConfigData()
+        self.config = ConfigData(self.database, self.logger)
         self.pump_status = "unchanged"
 
     def set_pump(self, pump_state):
@@ -113,7 +113,7 @@ def main():
 
                 if auto_shack.database.connected:
                     try:
-                        auto_shack.database.insert_data(data)
+                        auto_shack.database.insert_shack_data(data)
                     except (MySQLdb.Error, MySQLdb.Warning) as err:
                         auto_shack.logger.info("Database error")
                         auto_shack.logger.info(err)
