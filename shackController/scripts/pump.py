@@ -1,31 +1,61 @@
-import RPi.GPIO as GPIO
-import asyncio
 import logging
+import asyncio
+import RPi.GPIO as GPIO
 
 
 class Pump:
+    """
+    A class representing a pump.
+
+    Attributes:
+        pin: The `pin` attribute is an integer representing the GPIO pin number to which the pump is connected.
+        logger: The `logger` attribute is an instance of the `Logger` class that is used to log messages to the console.
+
+    Methods:
+        setup: The `setup` method initializes the GPIO pins for output in BCM mode with warnings disabled.
+        pump_on: The `pumpOn` method turns on a pump by setting the GPIO pin to HIGH.
+        pump_off: The `pumpOff` method turns off a GPIO pin by setting it to LOW.
+        run_pump: The `runPump` method turns on a pump for a specified duration and then turns it off.
+    """
+
     def __init__(self, pin, logger):
         self.logger = logger
         self.pin = pin
         self.setup()
 
     def setup(self):
+        """
+        The setup function initializes GPIO pins for output in BCM mode with warnings disabled.
+        """
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         GPIO.setup(self.pin, GPIO.OUT)
 
-    def pumpOn(self):
+    def pump_on(self):
+        """
+        The `pumpOn` function turns on a pump by setting the GPIO pin to HIGH.
+        """
         GPIO.output(self.pin, GPIO.HIGH)
 
-    def pumpOff(self):
+    def pump_off(self):
+        """
+        The `pumpOff` function turns off a GPIO pin by setting it to LOW.
+        """
         GPIO.output(self.pin, GPIO.LOW)
 
-    async def runPump(self, duration):
+    async def run_pump(self, duration):
+        """
+        The `runPump` function turns on a pump for a specified duration and then turns it off.
+
+        :param duration: The `duration` parameter in the `runPump` method represents the amount of time,
+        in seconds, for which the pump will be running. During this duration, the pump will be turned
+        on, and the method will log a dot (".") every second to indicate that the pump is still running.
+        """
         logging.info("PUMP ON")
-        self.pumpOn()
-        for i in range(duration):
-            self.logger.info('.', end=" ", flush=True)
+        self.pump_on()
+        for _ in range(duration):
+            self.logger.info(".", end=" ", flush=True)
             await asyncio.sleep(1)
 
         self.logger.info("PUMP OFF")
-        self.pumpOff()
+        self.pump_off()
