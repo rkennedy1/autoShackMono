@@ -5,7 +5,7 @@ import time
 from datetime import datetime
 
 from logging.handlers import TimedRotatingFileHandler
-import MySQLdb
+import mysql.connector
 
 
 from configData import ConfigData
@@ -92,16 +92,16 @@ def main():
 
                 if auto_shack.database.connected:
                     try:
-                        auto_shack.config.getConfigurationDataFromDB()
-                    except (MySQLdb.Error, MySQLdb.Warning) as err:
+                        auto_shack.config.get_configuration_data_from_db()
+                    except mysql.connector.Error as err:
                         auto_shack.logger.info("Database error")
                         auto_shack.logger.info(err)
-                        auto_shack.config.getConfigurationDataFromFile()
+                        auto_shack.config.get_configuration_data_from_db()
                     else:
-                        auto_shack.config.getConfigurationDataFromFile()
+                        auto_shack.config.get_configuration_data_from_file()
 
-                auto_shack.config.setDesiredPumpState()
-                auto_shack.set_pump(auto_shack.config.desiredPumpStateOn)
+                auto_shack.config.set_desired_pump_state()
+                auto_shack.set_pump(auto_shack.config.desired_pump_state_on)
 
                 data = {
                     "datetime": datetime.now(),
@@ -114,7 +114,7 @@ def main():
                 if auto_shack.database.connected:
                     try:
                         auto_shack.database.insert_shack_data(data)
-                    except (MySQLdb.Error, MySQLdb.Warning) as err:
+                    except mysql.connector.Error as err:
                         auto_shack.logger.info("Database error")
                         auto_shack.logger.info(err)
                 auto_shack.logger.info(data)

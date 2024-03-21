@@ -1,7 +1,6 @@
-import json
 import os
 from dotenv import load_dotenv
-import pymysql as MySQLdb
+import mysql.connector
 
 load_dotenv()
 ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), ".."))
@@ -24,7 +23,7 @@ class Database:
     def __init__(self):
 
         try:
-            self.db = MySQLdb.connect(
+            self.db = mysql.connector.connect(
                 host=os.getenv("MYSQL_HOST"),
                 user=os.getenv("MYSQL_USER"),
                 password=os.getenv("MYSQL_PASSWORD"),
@@ -32,10 +31,9 @@ class Database:
             )
             self.cursor = self.db.cursor()
             self.connected = True
-        except (MySQLdb.Error, MySQLdb.Warning) as e:
+        except mysql.connector.Error as err:
             self.connected = False
-            print(e)
-            return None
+            print(err)
 
     def insert_shack_data(self, data):
         """
@@ -50,9 +48,9 @@ class Database:
             )
             self.cursor.execute(sql)
             self.db.commit()
-        except (MySQLdb.Error, MySQLdb.Warning) as e:
+        except mysql.connector.Error as err:
             print("Insert data error")
-            print(e)
+            print(err)
 
     def query_data(self, query):
         """
@@ -63,42 +61,60 @@ class Database:
         try:
             self.cursor.execute(query)
             return self.cursor.fetchall()
-        except (MySQLdb.Error, MySQLdb.Warning) as e:
+        except mysql.connector.Error as err:
             print("Query data error")
-            print(e)
+            print(err)
+            return None
+
+    def reconnect(self):
+        """
+        The `reconnect` function reconnects to the MySQL database.
+        """
+        try:
+            self.db = mysql.connector.connect(
+                host=os.getenv("MYSQL_HOST"),
+                user=os.getenv("MYSQL_USER"),
+                password=os.getenv("MYSQL_PASSWORD"),
+                database=os.getenv("MYSQL_DATABASE"),
+            )
+            self.cursor = self.db.cursor()
+            self.connected = True
+        except mysql.connector.Error as err:
+            self.connected = False
+            print(err)
 
 
-def main():
-    lines = []
-    entries = []
-    with open(ROOT_DIR + "/logs/shackdata.log") as f:
-        lines = f.readlines()
+# def main():
+#     lines = []
+#     entries = []
+#     with open(ROOT_DIR + "/logs/shackdata.log") as f:
+#         lines = f.readlines()
 
-    lastAdd = []
-    with open(ROOT_DIR + "/logs/lastAdd.txt", "r") as f:
-        lastAdd = f.readlines()
-        if not lastAdd:
-            lastAdd.append("000")
+#     lastAdd = []
+#     with open(ROOT_DIR + "/logs/lastAdd.txt", "r") as f:
+#         lastAdd = f.readlines()
+#         if not lastAdd:
+#             lastAdd.append("000")
 
-    for line in lines:
-        jsonline = json.loads(line)
-        if jsonline["datetime"] > lastAdd[0]:
-            entries.append(jsonline)
+#     for line in lines:
+#         jsonline = json.loads(line)
+#         if jsonline["datetime"] > lastAdd[0]:
+#             entries.append(jsonline)
 
-    if entries:
-        with open(ROOT_DIR + "/logs/lastAdd.txt", "w") as f:
-            f.write(entries[-1]["datetime"])
+#     if entries:
+#         with open(ROOT_DIR + "/logs/lastAdd.txt", "w") as f:
+#             f.write(entries[-1]["datetime"])
 
-    if len(entries) != 0:
-        print(entries)
-        D1 = Database()
-        for entry in entries:
-            D1.insert_shack_data(entry)
+#     if len(entries) != 0:
+#         print(entries)
+#         D1 = Database()
+#         for entry in entries:
+#             D1.insert_shack_data(entry)
 
-        print("Added ", len(entries), " entries to the database")
-    else:
-        print("Failed to add data to the database")
+#         print("Added ", len(entries), " entries to the database")
+#     else:
+#         print("Failed to add data to the database")
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
