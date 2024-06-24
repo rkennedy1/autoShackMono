@@ -28,12 +28,14 @@ class HumidityTempSensor:
         try:
             self.humidity, self.temperature = 0, 0
             result = self.sensor.sample(samples=5)
+            if result["valid"]:
+                self.temperature = result["temp_f"]
+                self.humidity = result["humidity"]
+                print(result)
+            else:
+                print("error reading DHT22 sensor")
         except TimeoutError:
-            self.logger.info("Temp/Humidity sensor timed out")
+            self.logger.info("Temp/Humidity sensor timed out") 
 
-        if result["valid"]:
-            self.temperature = result["temp_f"]
-            self.humidity = result["humidity"]
-            print(result)
-        else:
-            print("error reading DHT22 sensor")
+
+       
