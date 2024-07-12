@@ -51,17 +51,14 @@ class AutoShack:
         Args:
             pump_state (bool): The desired state of the pump.
         """
-        if pump_state and self.flow_sensor.flow == 0:
+        if pump_state:
             self.pump.pump_on()
             self.logger.info("Pump turned ON")
             self.pump_status = "ON"
-        elif not pump_state and self.flow_sensor.flow > 0:
+        else:
             self.pump.pump_off()
             self.logger.info("Pump turned OFF")
             self.pump_status = "OFF"
-        else:
-            self.logger.info("Pump unchanged")
-            self.pump_status = "unchanged"
 
     def get_readings(self):
         """
