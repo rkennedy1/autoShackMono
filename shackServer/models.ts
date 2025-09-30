@@ -18,7 +18,7 @@ export interface SQLUpdateResponse {
 export interface shackLogItem {
   id: number;
   datetime: Date;
-  humdity: number;
+  humidity: number;
   temperature: number;
   flow_rate: number;
   pump_status: string;

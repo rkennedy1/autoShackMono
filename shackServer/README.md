@@ -64,7 +64,7 @@ interface ShackSchedule {
 interface shackLogItem {
   id: number;
   datetime: Date;
-  humdity: number;       // Humidity percentage
+  humidity: number;       // Humidity percentage
   temperature: number;   // Temperature in Celsius
   flow_rate: number;     // Water flow rate
   pump_status: string;   // Current pump status
@@ -156,7 +156,7 @@ Stores sensor readings and system logs:
 CREATE TABLE shacklog (
   id INT AUTO_INCREMENT PRIMARY KEY,
   datetime DATETIME,
-  humdity DECIMAL(5,2),
+  humidity DECIMAL(5,2),
   temperature DECIMAL(5,2),
   flow_rate DECIMAL(5,2),
   pump_status VARCHAR(50),

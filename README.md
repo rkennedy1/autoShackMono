@@ -131,7 +131,7 @@ MYSQL_DATABASE=autoshack
 CREATE TABLE shacklog (
   id INT AUTO_INCREMENT PRIMARY KEY,
   datetime DATETIME,
-  humdity DECIMAL(5,2),
+  humidity DECIMAL(5,2),
   temperature DECIMAL(5,2),
   flow_rate DECIMAL(5,2),
   pump_status VARCHAR(50),
