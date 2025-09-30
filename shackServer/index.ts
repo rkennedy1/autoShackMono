@@ -4,8 +4,6 @@ import dotenv from "dotenv";
 import dataRouter from "./src/data";
 import scheduleRouter from "./src/schedule";
 import RateLimit from "express-rate-limit";
-import swaggerUi from "swagger-ui-express";
-import swaggerDocument from "./swagger-output.json";
 
 const limiter = RateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -17,7 +15,6 @@ dotenv.config();
 const app = express();
 export const PORT = process.env.PORT || 1783;
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(limiter);
 app.use(cors());
 app.use(express.json());

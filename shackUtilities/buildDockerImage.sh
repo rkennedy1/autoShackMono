@@ -25,7 +25,7 @@ main() {
   buildDockerImage "shack_server"
 
   echo_header "Building Shack Web Image"
-  cd "$SCRIPT_DIR/../shackweb2/" || { echo_error "Failed to change directory"; exit 1; }
+  cd "$SCRIPT_DIR/../shackWeb/" || { echo_error "Failed to change directory"; exit 1; }
   if [ ! -d "./" ]; then
     echo_error "Directory not found."
     exit 1
