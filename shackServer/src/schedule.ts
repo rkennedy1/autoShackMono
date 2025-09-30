@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { SQLUpdateResponse, ShackSchedule } from "../models";
 var db = require("./db");
-import { MysqlError } from "mysql";
+import { QueryError } from "mysql2";
 const router = express.Router();
 
 router.use(express.json());
@@ -11,7 +11,7 @@ router.get("/", function (req: Request, res: Response) {
   // #swagger.tags = ['Schedule']
   const query =
     "SELECT start_hour, duration, id FROM shackSchedule ORDER BY start_hour";
-  db.query(query, function (err: MysqlError | null, result: ShackSchedule[]) {
+  db.query(query, function (err: QueryError | null, result: ShackSchedule[]) {
     if (err) {
       console.error(err);
       res.status(500).send("Internal Server Error");
@@ -28,7 +28,7 @@ router.post("/update", function (req: Request, res: Response) {
   db.query(
     query,
     [start_hour, duration, id],
-    function (err: MysqlError | null) {
+    function (err: QueryError | null) {
       if (err) {
         console.error(err);
         res.status(500).send("Internal Server Error");
@@ -38,7 +38,7 @@ router.post("/update", function (req: Request, res: Response) {
       db.query(
         selectQuery,
         id,
-        function (err: MysqlError | null, result: ShackSchedule[]) {
+        function (err: QueryError | null, result: ShackSchedule[]) {
           if (err) {
             console.error(err);
             res.status(500).send("Internal Server Error");
@@ -58,7 +58,7 @@ router.post("/add", function (req: Request, res: Response) {
   db.query(
     query,
     [start_hour, duration],
-    function (err: MysqlError | null, resp: SQLUpdateResponse) {
+    function (err: QueryError | null, resp: SQLUpdateResponse) {
       if (err) {
         console.error(err);
         res.status(500).send("Internal Server Error");
@@ -68,7 +68,7 @@ router.post("/add", function (req: Request, res: Response) {
       db.query(
         selectQuery,
         resp.insertId,
-        function (err: MysqlError | null, result: ShackSchedule[]) {
+        function (err: QueryError | null, result: ShackSchedule[]) {
           if (err) {
             console.error(err);
             res.status(500).send("Internal Server Error");
@@ -88,7 +88,7 @@ router.post("/delete", function (req: Request, res: Response) {
   db.query(
     query,
     id,
-    function (err: MysqlError | null, resp: SQLUpdateResponse) {
+    function (err: QueryError | null, resp: SQLUpdateResponse) {
       if (err) {
         console.error(err);
         res.status(500).send("Internal Server Error");
