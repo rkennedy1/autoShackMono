@@ -300,15 +300,6 @@ docker-compose logs service_name
 
 MIT License - This project is open source and available under the MIT License.
 
-## 🎯 Roadmap
-
-- [ ] Mobile app for iOS/Android
-- [ ] Advanced analytics and ML predictions
-- [ ] Multi-zone watering support
-- [ ] Integration with weather APIs
-- [ ] Voice control via smart assistants
-
----
 
 **Quick Commands Reference:**
 
