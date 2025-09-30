@@ -1,0 +1,50 @@
+[
+  {
+    "datetime": "2024-01-13T10:00:00.000Z",
+    "flow_rate": 0,
+    "temperature": 20,
+    "humidity": 60
+  },
+  {
+    "datetime": "2024-01-13T14:00:00.000Z",
+    "flow_rate": 2.5,
+    "temperature": 23,
+    "humidity": 65
+  },
+  {
+    "datetime": "2024-01-13T18:00:00.000Z",
+    "flow_rate": 0,
+    "temperature": 21,
+    "humidity": 62
+  },
+  {
+    "datetime": "2024-01-14T10:00:00.000Z",
+    "flow_rate": 0,
+    "temperature": 22,
+    "humidity": 68
+  },
+  {
+    "datetime": "2024-01-14T14:00:00.000Z",
+    "flow_rate": 1.8,
+    "temperature": 25,
+    "humidity": 70
+  },
+  {
+    "datetime": "2024-01-14T18:00:00.000Z",
+    "flow_rate": 0,
+    "temperature": 23,
+    "humidity": 67
+  },
+  {
+    "datetime": "2024-01-15T10:00:00.000Z",
+    "flow_rate": 0,
+    "temperature": 21,
+    "humidity": 63
+  },
+  {
+    "datetime": "2024-01-15T14:00:00.000Z",
+    "flow_rate": 0,
+    "temperature": 22,
+    "humidity": 65
+  }
+]

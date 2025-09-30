@@ -5,8 +5,9 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.2.4",
     "@mui/material": "^5.2.4",
-    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^14.2.1",
     "@testing-library/user-event": "^14.5.2",
     "@types/jest": "^29.5.12",
@@ -22,19 +23,24 @@
   },
   "devDependencies": {
     "axios": "^1.6.7",
-    "react-scripts": "5.0.1",
-    "cypress": "^13.6.6"
+    "cypress": "^13.6.6",
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage --watchAll=false",
+    "test:watch": "react-scripts test",
+    "test:e2e": "cypress run",
+    "test:e2e:open": "cypress open",
+    "test:component": "cypress run --component",
+    "test:component:open": "cypress open --component",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
