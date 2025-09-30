@@ -41,7 +41,7 @@ app.use("/data", dataRouter);
 app.use("/schedule", scheduleRouter);
 
 // Error handling middleware
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+app.use((err: Error, req: Request, res: Response) => {
   console.error(err.stack, req.originalUrl);
   res.status(500).send("Something went wrong!");
 });
