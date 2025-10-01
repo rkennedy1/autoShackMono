@@ -7,7 +7,15 @@ import RateLimit from "express-rate-limit";
 
 const limiter = RateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // max 100 requests per windowMs
+  max: 1000, // max 1000 requests per windowMs (increased for development)
+  skip: (req) => {
+    // Skip rate limiting for localhost/development
+    return (
+      req.ip === "127.0.0.1" ||
+      req.ip === "::1" ||
+      req.ip === "::ffff:127.0.0.1"
+    );
+  },
 });
 
 dotenv.config();
