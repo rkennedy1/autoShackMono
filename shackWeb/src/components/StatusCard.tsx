@@ -261,6 +261,8 @@ export const HumidityCard: React.FC<{
       subtitle="Relative humidity level"
     />
   );
+};
+
 export const FlowRateCard: React.FC<{
   flowRate: number;
   isActive?: boolean;
