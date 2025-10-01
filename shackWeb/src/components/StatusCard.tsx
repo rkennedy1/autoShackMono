@@ -226,7 +226,7 @@ export const TemperatureCard: React.FC<{
     <StatusCard
       title="Temperature"
       value={temperature}
-      unit="°C"
+      unit="°F"
       icon={<DeviceThermostat />}
       color={getTemperatureColor(temperature)}
       trend={trend}
@@ -261,8 +261,6 @@ export const HumidityCard: React.FC<{
       subtitle="Relative humidity level"
     />
   );
-};
-
 export const FlowRateCard: React.FC<{
   flowRate: number;
   isActive?: boolean;

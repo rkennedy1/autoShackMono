@@ -10,7 +10,10 @@ const ShackGraph = (props: graphProps) => {
     {
       label: "Flow Rate",
       data: props.data.map((item) => {
-        return { date: new Date(item.datetime), data: item.flow_rate * 10 };
+        // Cap flow rate at 100 to prevent graph scaling issues
+        // We only care about flow vs no flow, not exact rate
+        const cappedFlowRate = Math.min(item.flow_rate * 10, 100);
+        return { date: new Date(item.datetime), data: cappedFlowRate };
       }),
     },
     {
@@ -20,7 +23,7 @@ const ShackGraph = (props: graphProps) => {
       }),
     },
     {
-      label: "Temperature",
+      label: "Temperature (°F)",
       data: props.data.map((item) => {
         return { date: new Date(item.datetime), data: item.temperature };
       }),
