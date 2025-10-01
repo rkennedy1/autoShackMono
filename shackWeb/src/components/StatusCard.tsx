@@ -216,7 +216,7 @@ export const TemperatureCard: React.FC<{
   };
 
   const getTemperatureProgress = (temp: number) => {
-    // Optimal range: 15-30°C
+    // Optimal range: 15-30°F
     if (temp < 15) return Math.max(0, (temp / 15) * 50);
     if (temp > 30) return Math.max(50, 100 - ((temp - 30) / 10) * 50);
     return 50 + ((temp - 15) / 15) * 50;

@@ -13,7 +13,7 @@ describe("StatusCard", () => {
       <StatusCard
         title="Test Card"
         value={42}
-        unit="°C"
+        unit="°F"
         icon={<DeviceThermostat />}
         color="primary"
       />
@@ -21,7 +21,7 @@ describe("StatusCard", () => {
 
     expect(screen.getByText("Test Card")).toBeInTheDocument();
     expect(screen.getByText("42")).toBeInTheDocument();
-    expect(screen.getByText("°C")).toBeInTheDocument();
+    expect(screen.getByText("°F")).toBeInTheDocument();
   });
 
   it("shows active indicator when isActive is true", () => {
@@ -60,11 +60,11 @@ describe("StatusCard", () => {
         value={25}
         icon={<DeviceThermostat />}
         trend="up"
-        trendValue="+2°C from yesterday"
+        trendValue="+2°F from yesterday"
       />
     );
 
-    expect(screen.getByText("+2°C from yesterday")).toBeInTheDocument();
+    expect(screen.getByText("+2°F from yesterday")).toBeInTheDocument();
   });
 
   it("displays subtitle when provided", () => {
@@ -87,7 +87,7 @@ describe("TemperatureCard", () => {
 
     expect(screen.getByText("Temperature")).toBeInTheDocument();
     expect(screen.getByText("25")).toBeInTheDocument();
-    expect(screen.getByText("°C")).toBeInTheDocument();
+    expect(screen.getByText("°F")).toBeInTheDocument();
     expect(screen.getByText("Current ambient temperature")).toBeInTheDocument();
   });
 
@@ -98,9 +98,9 @@ describe("TemperatureCard", () => {
   });
 
   it("displays trend when provided", () => {
-    render(<TemperatureCard temperature={22} trend="up" trendValue="+3°C" />);
+    render(<TemperatureCard temperature={22} trend="up" trendValue="+3°F" />);
 
-    expect(screen.getByText("+3°C")).toBeInTheDocument();
+    expect(screen.getByText("+3°F")).toBeInTheDocument();
   });
 });
 

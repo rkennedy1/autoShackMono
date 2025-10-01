@@ -28,7 +28,7 @@ describe("Enhanced Dashboard", () => {
 
       // Should show temperature, humidity, and flow status
       cy.get('[data-testid="status-indicators"]').within(() => {
-        cy.contains("°C").should("be.visible");
+        cy.contains("°F").should("be.visible");
         cy.contains("%").should("be.visible");
         cy.contains(/Active|Idle/).should("be.visible");
       });
@@ -71,7 +71,7 @@ describe("Enhanced Dashboard", () => {
         .within(() => {
           // Should show temperature value and unit
           cy.contains(/\d+/).should("be.visible");
-          cy.contains("°C").should("be.visible");
+          cy.contains("°F").should("be.visible");
           cy.contains("Current ambient temperature").should("be.visible");
         });
     });

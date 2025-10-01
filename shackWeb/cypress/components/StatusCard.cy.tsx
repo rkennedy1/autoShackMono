@@ -21,7 +21,7 @@ describe("StatusCard Components", () => {
 
       cy.contains("Temperature").should("be.visible");
       cy.contains("22").should("be.visible");
-      cy.contains("°C").should("be.visible");
+      cy.contains("°F").should("be.visible");
       cy.contains("Current ambient temperature").should("be.visible");
     });
 
@@ -43,12 +43,12 @@ describe("StatusCard Components", () => {
           <TemperatureCard
             temperature={25}
             trend="up"
-            trendValue="+3°C from yesterday"
+            trendValue="+3°F from yesterday"
           />
         </TestWrapper>
       );
 
-      cy.contains("+3°C from yesterday").should("be.visible");
+      cy.contains("+3°F from yesterday").should("be.visible");
       cy.get('[data-testid="trending-up-icon"]').should("be.visible");
     });
   });

@@ -125,10 +125,10 @@ const AppHeader: React.FC = () => {
               alignItems: "center",
             }}
           >
-            <Tooltip title={`Temperature: ${lastReading.temperature}°C`}>
+            <Tooltip title={`Temperature: ${lastReading.temperature}°F`}>
               <Chip
                 icon={<DeviceThermostat />}
-                label={`${lastReading.temperature}°C`}
+                label={`${lastReading.temperature}°F`}
                 size="small"
                 color={getStatusColor(lastReading.temperature, "temp")}
                 sx={{
