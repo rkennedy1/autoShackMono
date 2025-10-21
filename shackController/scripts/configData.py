@@ -62,6 +62,7 @@ class ConfigData:
     def get_configuration_data_from_db(self):
         """
         Retrieves configuration data from the database.
+        If MySQL fails, automatically falls back to JSON file.
 
         Returns:
             list: A list of dictionaries containing the configuration data.
@@ -77,8 +78,17 @@ class ConfigData:
             data = self.database.query_data(query)
             if data:
                 self.schedule_data = self.parse_configuration_data(data)
+                self.logger.info("Configuration data retrieved from database")
+            else:
+                self.logger.warning("No data returned from database, falling back to JSON file")
+                self.get_configuration_data_from_file()
         except mysql.connector.Error as e:
             self.logger.error(f"Error retrieving configuration data from database: {e}")
+            self.logger.info("Falling back to JSON configuration file")
+            self.get_configuration_data_from_file()
+        except Exception as e:
+            self.logger.error(f"Unexpected error retrieving configuration data: {e}")
+            self.logger.info("Falling back to JSON configuration file")
             self.get_configuration_data_from_file()
 
     def get_configuration_data_from_file(self):
@@ -95,10 +105,22 @@ class ConfigData:
             os.path.dirname(__file__), "..", "shack.config.json"
         )
 
-        with open(config_file_path, encoding="utf-8") as file:
-            configuration_data = json.load(file)
-
-        self.schedule_data = configuration_data.get("events", [])
+        try:
+            with open(config_file_path, encoding="utf-8") as file:
+                configuration_data = json.load(file)
+            
+            self.schedule_data = configuration_data.get("events", [])
+            self.logger.info(f"Configuration data loaded from JSON file: {len(self.schedule_data)} events")
+            
+        except FileNotFoundError:
+            self.logger.error(f"Configuration file not found: {config_file_path}")
+            self.schedule_data = []
+        except json.JSONDecodeError as e:
+            self.logger.error(f"Error parsing JSON configuration file: {e}")
+            self.schedule_data = []
+        except Exception as e:
+            self.logger.error(f"Unexpected error reading configuration file: {e}")
+            self.schedule_data = []
 
     def set_desired_pump_state(self):
         """
