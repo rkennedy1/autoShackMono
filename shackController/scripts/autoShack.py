@@ -73,9 +73,18 @@ def main():
     Main function for Autoshack
     """
     auto_shack = AutoShack()
+    last_reconnect_attempt = 0
+    reconnect_interval = 300  # Try to reconnect every 5 minutes (300 seconds)
+    
     try:
         while True:
             if datetime.now().second == 0:
+                # Try to reconnect if disconnected and enough time has passed
+                current_time = time.time()
+                if not auto_shack.database.connected and (current_time - last_reconnect_attempt) >= reconnect_interval:
+                    auto_shack.logger.info("Attempting to reconnect to database...")
+                    auto_shack.database.reconnect()
+                    last_reconnect_attempt = current_time
                 auto_shack.get_readings()
                 auto_shack.logger.info(
                     "Humidity (%%): %s", auto_shack.temp_humidity_sensor.humidity
