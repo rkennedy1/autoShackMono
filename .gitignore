@@ -132,7 +132,8 @@ dist
 
 __pycache__/
 
-shack.config.json*
+/shackController/shack.config.json*
+/shackController/shack.config.json.backup*
 
 /shackServer/images/
 /shackServer/build/
