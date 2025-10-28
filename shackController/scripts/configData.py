@@ -33,6 +33,9 @@ class ConfigData:
         self.desired_pump_state_on = False
         self.database = database
         self.logger = logger
+        self.config_file_path = os.path.join(
+            os.path.dirname(__file__), "..", "shack.config.json"
+        )
 
     def parse_configuration_data(self, data):
         """
@@ -59,9 +62,17 @@ class ConfigData:
             )
         return parsed_config_data
 
+    def put_configuration_data_to_file(self):
+        """
+        Puts the configuration data to a JSON file.
+        """
+        with open(self.config_file_path, "w") as file:
+            json.dump(self.schedule_data, file)
+
     def get_configuration_data_from_db(self):
         """
         Retrieves configuration data from the database.
+        If MySQL fails, automatically falls back to JSON file.
 
         Returns:
             list: A list of dictionaries containing the configuration data.
@@ -77,8 +88,18 @@ class ConfigData:
             data = self.database.query_data(query)
             if data:
                 self.schedule_data = self.parse_configuration_data(data)
+                self.logger.info("Configuration data retrieved from database")
+                self.put_configuration_data_to_file()
+            else:
+                self.logger.warning("No data returned from database, falling back to JSON file")
+                self.get_configuration_data_from_file()
         except mysql.connector.Error as e:
             self.logger.error(f"Error retrieving configuration data from database: {e}")
+            self.logger.info("Falling back to JSON configuration file")
+            self.get_configuration_data_from_file()
+        except Exception as e:
+            self.logger.error(f"Unexpected error retrieving configuration data: {e}")
+            self.logger.info("Falling back to JSON configuration file")
             self.get_configuration_data_from_file()
 
     def get_configuration_data_from_file(self):
@@ -91,14 +112,22 @@ class ConfigData:
         self.desired_pump_state_on = False
         configuration_data = []
 
-        config_file_path = os.path.join(
-            os.path.dirname(__file__), "..", "shack.config.json"
-        )
-
-        with open(config_file_path, encoding="utf-8") as file:
-            configuration_data = json.load(file)
-
-        self.schedule_data = configuration_data.get("events", [])
+        try:
+            with open(self.config_file_path, encoding="utf-8") as file:
+                configuration_data = json.load(file)
+            
+            self.schedule_data = configuration_data.get("events", [])
+            self.logger.info(f"Configuration data loaded from JSON file: {len(self.schedule_data)} events")
+            
+        except FileNotFoundError:
+            self.logger.error(f"Configuration file not found: {self.config_file_path}")
+            self.schedule_data = []
+        except json.JSONDecodeError as e:
+            self.logger.error(f"Error parsing JSON configuration file: {e}")
+            self.schedule_data = []
+        except Exception as e:
+            self.logger.error(f"Unexpected error reading configuration file: {e}")
+            self.schedule_data = []
 
     def set_desired_pump_state(self):
         """

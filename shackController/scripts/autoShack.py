@@ -51,17 +51,14 @@ class AutoShack:
         Args:
             pump_state (bool): The desired state of the pump.
         """
-        if pump_state and self.flow_sensor.flow == 0:
+        if pump_state:
             self.pump.pump_on()
             self.logger.info("Pump turned ON")
             self.pump_status = "ON"
-        elif not pump_state and self.flow_sensor.flow > 0:
+        else:
             self.pump.pump_off()
             self.logger.info("Pump turned OFF")
             self.pump_status = "OFF"
-        else:
-            self.logger.info("Pump unchanged")
-            self.pump_status = "unchanged"
 
     def get_readings(self):
         """
@@ -76,9 +73,18 @@ def main():
     Main function for Autoshack
     """
     auto_shack = AutoShack()
+    last_reconnect_attempt = 0
+    reconnect_interval = 300  # Try to reconnect every 5 minutes (300 seconds)
+    
     try:
         while True:
             if datetime.now().second == 0:
+                # Try to reconnect if disconnected and enough time has passed
+                current_time = time.time()
+                if not auto_shack.database.connected and (current_time - last_reconnect_attempt) >= reconnect_interval:
+                    auto_shack.logger.info("Attempting to reconnect to database...")
+                    auto_shack.database.reconnect()
+                    last_reconnect_attempt = current_time
                 auto_shack.get_readings()
                 auto_shack.logger.info(
                     "Humidity (%%): %s", auto_shack.temp_humidity_sensor.humidity
@@ -94,11 +100,11 @@ def main():
                     try:
                         auto_shack.config.get_configuration_data_from_db()
                     except mysql.connector.Error as err:
-                        auto_shack.logger.info("Database error")
-                        auto_shack.logger.info(err)
-                        auto_shack.config.get_configuration_data_from_db()
+                        auto_shack.logger.error(f"Database error: {err}")
+                        auto_shack.logger.info("Falling back to JSON configuration file")
+                        auto_shack.config.get_configuration_data_from_file()
                 else:
-                    auto_shack.database.reconnect()
+                    auto_shack.logger.info("Database not connected, using JSON configuration file")
                     auto_shack.config.get_configuration_data_from_file()
 
                 auto_shack.config.set_desired_pump_state()
@@ -115,9 +121,13 @@ def main():
                 if auto_shack.database.connected:
                     try:
                         auto_shack.database.insert_shack_data(data)
+                        auto_shack.logger.info("Data successfully inserted into database")
                     except mysql.connector.Error as err:
-                        auto_shack.logger.info("Database error")
-                        auto_shack.logger.info(err)
+                        auto_shack.logger.error(f"Database insertion error: {err}")
+                        auto_shack.logger.info("Data logging failed, but service continues")
+                else:
+                    auto_shack.logger.info("Database not connected, data logging skipped")
+                
                 auto_shack.logger.info(data)
                 time.sleep(1)
 

@@ -1,12 +1,12 @@
 import express, { Request, Response, NextFunction } from "express";
 import { shackLogItem } from "../models";
 const db = require("./db");
-import { MysqlError } from "mysql";
+import { QueryError } from "mysql2";
 const router = express.Router();
 
 // Reusable function for executing database queries
 function executeQuery(query: string, res: Response) {
-  db.query(query, function (err: MysqlError | null, result: shackLogItem[]) {
+  db.query(query, function (err: QueryError | null, result: shackLogItem[]) {
     if (err) {
       console.error(err);
       return res.status(500).send("Internal Server Error");
