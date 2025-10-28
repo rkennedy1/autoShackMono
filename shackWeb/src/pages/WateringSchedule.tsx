@@ -1,15 +1,22 @@
-// WateringSchedule.js
 import { useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Box,
+  Divider,
+} from "@mui/material";
+import { Schedule, Add } from "@mui/icons-material";
 import {
   getSchedule,
   updateScheduleItem,
   addScheduleItem,
   deleteScheduleItem,
 } from "../api/api";
-import { Button } from "@mui/material";
 import ScheduleItem from "../components/ScheduleItem";
 import { scheduleItem } from "../util/models";
-import Loading from "../components/Loading";
+import { ScheduleSkeleton } from "../components/LoadingSkeleton";
 
 const WateringSchedule = () => {
   const [items, setItems] = useState<scheduleItem[]>([]);
@@ -33,7 +40,6 @@ const WateringSchedule = () => {
   ) => {
     setLoading(true);
     try {
-      console.log();
       const responseItem = updatedItem.id
         ? await updateScheduleItem(updatedItem)
         : await addScheduleItem(updatedItem);
@@ -74,38 +80,79 @@ const WateringSchedule = () => {
     setItems((prevItems) => [...prevItems, { start_hour: 0, duration: 0 }]);
   };
 
+  if (loading) {
+    return <ScheduleSkeleton />;
+  }
+
   return (
-    <div>
-      <h2 id="shackScheduleHeading">Shack Schedule</h2>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        {loading ? (
-          <Loading name="WateringSchedule" />
-        ) : items.length > 0 ? (
-          <div>
-            {items.map((item, i) => (
-              <ScheduleItem
-                key={i}
-                index={i}
-                item={item}
-                onUpdate={handleUpdateScheduleItem}
-                onDelete={handleDeleteScheduleItem}
-              />
-            ))}
-            <Button onClick={handleAddNewItem} id="AddNewItemButton">
-              Add New Item
-            </Button>
-          </div>
-        ) : (
-          <p>No schedule items available</p>
-        )}
-      </div>
-    </div>
+    <Card sx={{ height: "100%" }}>
+      <CardContent sx={{ p: 3 }}>
+        {/* Header */}
+        <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+          <Schedule sx={{ mr: 1, color: "primary.main" }} />
+          <Typography
+            variant="h5"
+            component="h2"
+            sx={{ fontWeight: 600 }}
+            id="shackScheduleHeading"
+          >
+            Shack Schedule
+          </Typography>
+        </Box>
+
+        <Divider sx={{ mb: 3 }} />
+
+        {/* Schedule Items */}
+        <Box sx={{ mb: 3 }}>
+          {items.length > 0 ? (
+            <Box>
+              {items.map((item, i) => (
+                <Box key={i} sx={{ mb: 2 }}>
+                  <ScheduleItem
+                    index={i}
+                    item={item}
+                    onUpdate={handleUpdateScheduleItem}
+                    onDelete={handleDeleteScheduleItem}
+                  />
+                  {i < items.length - 1 && <Divider sx={{ mt: 2 }} />}
+                </Box>
+              ))}
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                py: 4,
+                color: "text.secondary",
+              }}
+            >
+              <Typography variant="body1">
+                No schedule items available
+              </Typography>
+            </Box>
+          )}
+        </Box>
+
+        {/* Add Button */}
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Button
+            onClick={handleAddNewItem}
+            variant="contained"
+            startIcon={<Add />}
+            id="AddNewItemButton"
+            sx={{
+              borderRadius: 2,
+              px: 3,
+              py: 1.5,
+            }}
+          >
+            Add New Schedule
+          </Button>
+        </Box>
+      </CardContent>
+    </Card>
   );
 };
 
